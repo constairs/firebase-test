@@ -60,7 +60,6 @@ const userLogoutFailed = error => pipe(
 );
 
 const userUpdateRequest = () => assoc('userFetching', true);
-
 const userUpdateSuccessed = updateResponse => pipe(
   assoc('userFetching', false),
   assoc('displayName', updateResponse.profileName),
@@ -68,7 +67,6 @@ const userUpdateSuccessed = updateResponse => pipe(
   assocPath(['notification', 'show'], true),
   assocPath(['notification', 'success'], 'Профиль успешно обновлен'),
 );
-
 const userUpdateFailed = error => pipe(
   assoc('userFetching', false),
   assocPath(['notification', 'show'], true),
@@ -79,6 +77,46 @@ const userCloseNotification = () => pipe(
   assocPath(['notification', 'show'], false),
   assocPath(['notification', 'error'], ''),
   assocPath(['notification', 'success'], ''),
+);
+
+
+const changeEmailRequest = () => assoc('userFetching', true);
+const changeEmailSuccessed = changeEmailResponse => pipe(
+  assoc('userFetching', false),
+  assoc('email', changeEmailResponse),
+  assocPath(['notification', 'show'], true),
+  assocPath(['notification', 'success'], 'Email успешно обновлен'),
+);
+const changeEmailFailed = error => pipe(
+  assoc('userFetching', false),
+  assocPath(['notification', 'show'], true),
+  assocPath(['notification', 'error'], error),
+);
+
+const changeVerificationRequest = () => assoc('userFetching', true);
+const changeVerificationSuccessed = changeEmailResponse => pipe(
+  assoc('userFetching', false),
+  assoc('authData', changeEmailResponse),
+  assocPath(['notification', 'show'], true),
+  assocPath(['notification', 'success'], 'Email успешно обновлен'),
+);
+const changeVerificationFailed = error => pipe(
+  assoc('userFetching', false),
+  assocPath(['notification', 'show'], true),
+  assocPath(['notification', 'error'], error),
+);
+
+
+const changePasswordRequest = () => assoc('userFetching', true);
+const changePasswordSuccessed = changeEmailResponse => pipe(
+  assoc('userFetching', false),
+  assocPath(['notification', 'show'], true),
+  assocPath(['notification', 'success'], changeEmailResponse),
+);
+const changePasswordFailed = error => pipe(
+  assoc('userFetching', false),
+  assocPath(['notification', 'show'], true),
+  assocPath(['notification', 'error'], error),
 );
 
 const handlers = {
@@ -97,6 +135,18 @@ const handlers = {
   [TYPES.USER_UPDATE_REQUEST]: userUpdateRequest,
   [TYPES.USER_UPDATE_SUCCESSED]: userUpdateSuccessed,
   [TYPES.USER_UPDATE_FAILED]: userUpdateFailed,
+
+  [TYPES.CHANGE_EMAIL_REQUEST]: changeEmailRequest,
+  [TYPES.CHANGE_EMAIL_SUCCESSED]: changeEmailSuccessed,
+  [TYPES.CHANGE_EMAIL_FAILED]: changeEmailFailed,
+
+  [TYPES.CHANGE_VERIFICATION_REQUEST]: changeVerificationRequest,
+  [TYPES.CHANGE_VERIFICATION_SUCCESSED]: changeVerificationSuccessed,
+  [TYPES.CHANGE_VERIFICATION_FAILED]: changeVerificationFailed,
+
+  [TYPES.CHANGE_PASSWORD_REQUEST]: changePasswordRequest,
+  [TYPES.CHANGE_PASSWORD_SUCCESSED]: changePasswordSuccessed,
+  [TYPES.CHANGE_PASSWORD_FAILED]: changePasswordFailed,
 
   [TYPES.USER_CLOSE_NOTIFICATION]: userCloseNotification,
 };

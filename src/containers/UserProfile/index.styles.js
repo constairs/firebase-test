@@ -5,7 +5,6 @@ import { ImgContainer } from '../../components/UI/ImgContainer';
 export const StyledProfile = styled.div`
   display: flex;
   align-items: center;
-  padding: 10px;
   p {
     margin: 10px 0
   };

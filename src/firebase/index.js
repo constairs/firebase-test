@@ -54,3 +54,40 @@ export function updateProfile(profileName, profileImg) {
     });
   });
 }
+
+export function updateEmail(email) {
+  return new Promise((resolve, reject) => {
+    const user = firebase.auth().currentUser;
+
+    user.updateEmail(email).then(() => {
+      resolve(email);
+    }).catch((error) => {
+      reject(error);
+    });
+  });
+}
+
+export function updateVerification(email) {
+  return new Promise((resolve, reject) => {
+    const user = firebase.auth().currentUser;
+
+    user.sendEmailVerification().then(() => {
+      resolve(email);
+    }).catch((error) => {
+      reject(error);
+    });
+  });
+}
+
+export function updatePassword(newPassword) {
+  return new Promise((resolve, reject) => {
+    const user = firebase.auth().currentUser;
+    // const newPassword = getASecureRandomPassword();
+
+    user.updatePassword(newPassword).then(() => {
+      resolve('Password changed successufuly!');
+    }).catch((error) => {
+      reject(error);
+    });
+  });
+}

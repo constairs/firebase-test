@@ -52,6 +52,45 @@ export const userUpdateFailed = error => ({
   payload: error
 });
 
+export const changeEmailRequest = email => ({
+  type: TYPES.CHANGE_EMAIL_REQUEST,
+  payload: email,
+});
+export const changeEmailSuccessed = changeEmailResponse => ({
+  type: TYPES.CHANGE_EMAIL_SUCCESSED,
+  payload: changeEmailResponse
+});
+export const changeEmailFailed = error => ({
+  type: TYPES.CHANGE_EMAIL_FAILED,
+  payload: error
+});
+
+export const changeVerificationRequest = verificationEmail => ({
+  type: TYPES.CHANGE_VERIFICATION_REQUEST,
+  payload: verificationEmail,
+});
+export const changeVerificationSuccessed = changeVerificationResponse => ({
+  type: TYPES.CHANGE_VERIFICATION_SUCCESSED,
+  payload: changeVerificationResponse
+});
+export const changeVerificationFailed = error => ({
+  type: TYPES.CHANGE_VERIFICATION_FAILED,
+  payload: error
+});
+
+export const changePasswordRequest = verificationEmail => ({
+  type: TYPES.CHANGE_PASSWORD_REQUEST,
+  payload: verificationEmail,
+});
+export const changePasswordSuccessed = changeVerificationResponse => ({
+  type: TYPES.CHANGE_PASSWORD_SUCCESSED,
+  payload: changeVerificationResponse
+});
+export const changePasswordFailed = error => ({
+  type: TYPES.CHANGE_PASSWORD_FAILED,
+  payload: error
+});
+
 export const closeNotification = () => ({
   type: TYPES.USER_CLOSE_NOTIFICATION,
 });

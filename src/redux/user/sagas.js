@@ -3,7 +3,10 @@ import {
   USER_CREATE_REQUEST,
   USER_LOGIN_REQUEST,
   USER_LOGOUT_REQUEST,
-  USER_UPDATE_REQUEST
+  USER_UPDATE_REQUEST,
+  CHANGE_EMAIL_REQUEST,
+  CHANGE_VERIFICATION_REQUEST,
+  CHANGE_PASSWORD_REQUEST
 } from './types';
 import {
   userCreateSuccessed,
@@ -14,12 +17,21 @@ import {
   userLogoutFailed,
   userUpdateSuccessed,
   userUpdateFailed,
+  changeEmailSuccessed,
+  changeEmailFailed,
+  changeVerificationSuccessed,
+  changeVerificationFailed,
+  changePasswordSuccessed,
+  changePasswordFailed
 } from './actions';
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
-  updateProfile
+  updateProfile,
+  updateEmail,
+  updateVerification,
+  updatePassword,
 } from '../../firebase/';
 
 export function* userCreateSaga(action) {
@@ -58,9 +70,39 @@ export function* userUpdateSaga(action) {
   }
 }
 
+export function* changeEmailSaga(action) {
+  try {
+    const changeResponse = yield call(updateEmail, action.payload);
+    yield put(changeEmailSuccessed(changeResponse));
+  } catch (error) {
+    yield put(changeEmailFailed(error));
+  }
+}
+
+export function* changeVerificationSaga(action) {
+  try {
+    const changeResponse = yield call(updateVerification, action.payload);
+    yield put(changeVerificationSuccessed(changeResponse));
+  } catch (error) {
+    yield put(changeVerificationFailed(error));
+  }
+}
+
+export function* changePasswordSaga(action) {
+  try {
+    const changeResponse = yield call(updatePassword, action.payload);
+    yield put(changePasswordSuccessed(changeResponse));
+  } catch (error) {
+    yield put(changePasswordFailed(error));
+  }
+}
+
 export function* userSagas() {
   yield takeLatest(USER_CREATE_REQUEST, userCreateSaga);
   yield takeLatest(USER_LOGIN_REQUEST, userLoginSaga);
   yield takeLatest(USER_LOGOUT_REQUEST, userLogoutSaga);
   yield takeLatest(USER_UPDATE_REQUEST, userUpdateSaga);
+  yield takeLatest(CHANGE_EMAIL_REQUEST, changeEmailSaga);
+  yield takeLatest(CHANGE_VERIFICATION_REQUEST, changeVerificationSaga);
+  yield takeLatest(CHANGE_PASSWORD_REQUEST, changePasswordSaga);
 }

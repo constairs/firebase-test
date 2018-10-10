@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { CloseBtn } from './CloseBtn';
+import { Form } from './Form';
 
 export const ModalWindow = styled.div`
   display: block;
@@ -13,4 +14,7 @@ export const ModalWindow = styled.div`
     top: 5px;
     right: 5px;
   };
+  ${Form} {
+    max-height: 400px;
+  }
 `;
