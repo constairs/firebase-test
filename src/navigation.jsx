@@ -1,8 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Switch, Route, Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
 import { ConnectedRouter } from 'connected-react-router';
+import { AuthPage } from './containers/AuthPage';
 import { LoginPage } from './containers/LoginPage';
+import { ProfilePage } from './containers/ProfilePage';
 import { history } from './redux/store';
 import { Header } from './containers/Header';
 
@@ -15,7 +18,7 @@ const Private = ({ component: Component, logged, ...rest }) => (
       ) : (
         <Redirect
           to={{
-            pathname: '/',
+            pathname: '/login',
             state: { from: props.location },
           }}
         />
@@ -23,6 +26,8 @@ const Private = ({ component: Component, logged, ...rest }) => (
     }
   />
 );
+
+const PrivateRoute = connect(state => ({ logged: state.persistedUser.logged }))(Private);
 
 Private.defaultProps = {
   logged: false,
@@ -39,7 +44,9 @@ export const Navigation = () => (
     <React.Fragment>
       <Header />
       <Switch>
-        <Route exact path="/" component={LoginPage} />
+        <Route exact path="/auth" component={AuthPage} />
+        <Route exact path="/login" component={LoginPage} />
+        <PrivateRoute component={ProfilePage} path="/profile" />
       </Switch>
     </React.Fragment>
   </ConnectedRouter>
