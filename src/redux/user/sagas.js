@@ -2,7 +2,8 @@ import { call, put, takeLatest } from 'redux-saga/effects';
 import {
   USER_CREATE_REQUEST,
   USER_LOGIN_REQUEST,
-  USER_LOGOUT_REQUEST
+  USER_LOGOUT_REQUEST,
+  USER_UPDATE_REQUEST
 } from './types';
 import {
   userCreateSuccessed,
@@ -11,11 +12,14 @@ import {
   userLoginFailed,
   userLogoutSuccessed,
   userLogoutFailed,
+  userUpdateSuccessed,
+  userUpdateFailed,
 } from './actions';
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-  signOut
+  signOut,
+  updateProfile
 } from '../../firebase/';
 
 export function* userCreateSaga(action) {
@@ -45,8 +49,18 @@ export function* userLogoutSaga() {
   }
 }
 
+export function* userUpdateSaga(action) {
+  try {
+    const updateResponse = yield call(updateProfile, ...action.payload);
+    yield put(userUpdateSuccessed(updateResponse));
+  } catch (error) {
+    yield put(userUpdateFailed(error.message));
+  }
+}
+
 export function* userSagas() {
   yield takeLatest(USER_CREATE_REQUEST, userCreateSaga);
   yield takeLatest(USER_LOGIN_REQUEST, userLoginSaga);
   yield takeLatest(USER_LOGOUT_REQUEST, userLogoutSaga);
+  yield takeLatest(USER_UPDATE_REQUEST, userUpdateSaga);
 }

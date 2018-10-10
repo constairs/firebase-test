@@ -39,3 +39,18 @@ export function signOut() {
     });
   });
 }
+
+export function updateProfile(profileName, profileImg) {
+  return new Promise((resolve, reject) => {
+    const user = firebase.auth().currentUser;
+
+    user.updateProfile({
+      displayName: profileName,
+      photoURL: profileImg
+    }).then(() => {
+      resolve({ profileName, profileImg });
+    }).catch((error) => {
+      reject(error);
+    });
+  });
+}

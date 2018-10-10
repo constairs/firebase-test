@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { userCreateRequest } from '../../redux/user/actions';
 
 import { AuthForm } from '../../components/AuthForm';
-import { UserProfile } from '../UserProfile';
 import { UserNotification } from '../UserNotification';
 
 class Auth extends React.Component {
@@ -17,7 +16,6 @@ class Auth extends React.Component {
     return (
       <div id="root">
         <AuthForm onCreateUser={this.handleCreateUser} />
-        <UserProfile />
         <UserNotification />
       </div>
     );

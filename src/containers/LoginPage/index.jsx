@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { userLoginRequest } from '../../redux/user/actions';
 
 import { LoginForm } from '../../components/LoginForm';
-import { UserProfile } from '../UserProfile';
 import { UserNotification } from '../UserNotification';
 
 class Login extends React.Component {
@@ -18,7 +17,6 @@ class Login extends React.Component {
       <div id="root">
         <UserNotification />
         <LoginForm onLoginUser={this.handleLoginUser} />
-        <UserProfile />
       </div>
     );
   }

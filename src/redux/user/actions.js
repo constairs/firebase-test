@@ -39,6 +39,18 @@ export const userLogoutFailed = error => ({
   payload: error
 });
 
+export const userUpdateRequest = updateUserData => ({
+  type: TYPES.USER_UPDATE_REQUEST,
+  payload: updateUserData,
+});
+export const userUpdateSuccessed = logoutResponse => ({
+  type: TYPES.USER_UPDATE_SUCCESSED,
+  payload: logoutResponse
+});
+export const userUpdateFailed = error => ({
+  type: TYPES.USER_UPDATE_FAILED,
+  payload: error
+});
 
 export const closeNotification = () => ({
   type: TYPES.USER_CLOSE_NOTIFICATION,
