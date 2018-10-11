@@ -1,4 +1,5 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
+import { push } from 'connected-react-router';
 import {
   USER_CREATE_REQUEST,
   USER_LOGIN_REQUEST,
@@ -40,12 +41,13 @@ import {
   sendVerification,
   updatePassword,
   resetPassword
-} from '../../firebase/';
+} from '../../firebase/userFuctions';
 
 export function* userCreateSaga(action) {
   try {
     const createResponse = yield call(createUserWithEmailAndPassword, ...action.payload);
     yield put(userCreateSuccessed(createResponse));
+    yield push('/profile');
   } catch (error) {
     yield put(userCreateFailed(error.message));
   }
@@ -55,6 +57,7 @@ export function* userLoginSaga(action) {
   try {
     const loginResponse = yield call(signInWithEmailAndPassword, ...action.payload);
     yield put(userLoginSuccessed(loginResponse));
+    yield push('/profile');
   } catch (error) {
     yield put(userLoginFailed(error.message));
   }
@@ -64,6 +67,7 @@ export function* userLogoutSaga() {
   try {
     const logoutResponse = yield call(signOut);
     yield put(userLogoutSuccessed(logoutResponse));
+    yield push('/login');
   } catch (error) {
     yield put(userLogoutFailed(error.message));
   }
@@ -82,6 +86,7 @@ export function* userDeleteSaga() {
   try {
     const deleteResponse = yield call(deleteProfile);
     yield put(userDeleteSuccessed(deleteResponse));
+    yield push('/auth');
   } catch (error) {
     yield put(userDeleteFailed(error));
   }

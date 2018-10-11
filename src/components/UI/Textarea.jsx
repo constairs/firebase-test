@@ -1,14 +1,14 @@
 import styled from 'styled-components';
+
 import { colors } from '../../theme/theme';
 
-export const Input = styled.input`
-  height: 30px;
-  width: 100%;
+export const Textarea = styled.textarea`
   border: 1px solid ${colors.dGrey};
+  width: 100%;
   border-radius: 3px;
   text-indent: 4px;
   padding: 4px 0;
   :focus {
-    border-color: ${colors.accent};
+    border: 1px solid ${colors.accent}
   }
 `;

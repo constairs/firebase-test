@@ -32,6 +32,15 @@ export const Head = ({ ...props }) => {
           :
           null
           }
+          {
+            logged ?
+              <li>
+                <Link href="/issues" to="/issues">
+                  Issues
+                </Link>
+              </li>
+            : null
+          }
         </ul>
       </StyledNav>
     </StyledHeader>
