@@ -4,9 +4,10 @@ import {
   USER_LOGIN_REQUEST,
   USER_LOGOUT_REQUEST,
   USER_UPDATE_REQUEST,
+  USER_DELETE_REQUEST,
   CHANGE_EMAIL_REQUEST,
   CHANGE_VERIFICATION_REQUEST,
-  CHANGE_PASSWORD_REQUEST
+  CHANGE_PASSWORD_REQUEST,
 } from './types';
 import {
   userCreateSuccessed,
@@ -22,13 +23,16 @@ import {
   changeVerificationSuccessed,
   changeVerificationFailed,
   changePasswordSuccessed,
-  changePasswordFailed
+  changePasswordFailed,
+  userDeleteSuccessed,
+  userDeleteFailed,
 } from './actions';
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
   updateProfile,
+  deleteProfile,
   updateEmail,
   updateVerification,
   updatePassword,
@@ -70,6 +74,15 @@ export function* userUpdateSaga(action) {
   }
 }
 
+export function* userDeleteSaga() {
+  try {
+    const deleteResponse = yield call(deleteProfile);
+    yield put(userDeleteSuccessed(deleteResponse));
+  } catch (error) {
+    yield put(userDeleteFailed(error));
+  }
+}
+
 export function* changeEmailSaga(action) {
   try {
     const changeResponse = yield call(updateEmail, action.payload);
@@ -102,6 +115,7 @@ export function* userSagas() {
   yield takeLatest(USER_LOGIN_REQUEST, userLoginSaga);
   yield takeLatest(USER_LOGOUT_REQUEST, userLogoutSaga);
   yield takeLatest(USER_UPDATE_REQUEST, userUpdateSaga);
+  yield takeLatest(USER_DELETE_REQUEST, userDeleteSaga);
   yield takeLatest(CHANGE_EMAIL_REQUEST, changeEmailSaga);
   yield takeLatest(CHANGE_VERIFICATION_REQUEST, changeVerificationSaga);
   yield takeLatest(CHANGE_PASSWORD_REQUEST, changePasswordSaga);

@@ -49,5 +49,5 @@ export class AuthForm extends React.Component {
 }
 
 AuthForm.propTypes = {
-  onCreateUser: PropTypes.func.isRequired,
+  onCreateUser: PropTypes.func.isRequired
 };

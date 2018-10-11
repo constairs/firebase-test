@@ -9,7 +9,8 @@ import { UserNotification } from '../UserNotification';
 import {
   changeEmailRequest,
   changeVerificationRequest,
-  changePasswordRequest
+  changePasswordRequest,
+  userDeleteRequest
 } from '../../redux/user/actions';
 
 import { Page } from '../../components/UI/Page';
@@ -45,7 +46,7 @@ class Profile extends React.Component {
     e.preventDefault();
     this.props.changeEmailRequest(this.state.changeEmailInput);
     this.setState({
-      changeEmailInput: '',
+      changeEmailInput: ''
     });
   }
 
@@ -53,7 +54,7 @@ class Profile extends React.Component {
     e.preventDefault();
     this.props.changeVerificationRequest(this.state.changeVerification);
     this.setState({
-      changeVerification: '',
+      changeVerification: ''
     });
   }
 
@@ -61,7 +62,7 @@ class Profile extends React.Component {
     e.preventDefault();
     this.props.changePasswordRequest(this.state.changePassword);
     this.setState({
-      changePassword: '',
+      changePassword: ''
     });
   }
 
@@ -107,7 +108,7 @@ class Profile extends React.Component {
             : null }
           </p>
           <p>
-            <Button>Удалить аккаунт</Button>
+            <Button onClick={this.props.userDeleteRequest}>Удалить аккаунт</Button>
           </p>
         </div>
       </Page>
@@ -123,6 +124,7 @@ export const ProfilePage = connect(
     changeEmailRequest: bindActionCreators(changeEmailRequest, dispatch),
     changeVerificationRequest: bindActionCreators(changeVerificationRequest, dispatch),
     changePasswordRequest: bindActionCreators(changePasswordRequest, dispatch),
+    userDeleteRequest: bindActionCreators(userDeleteRequest, dispatch)
   })
 )(Profile);
 
@@ -131,4 +133,5 @@ Profile.propTypes = {
   changeEmailRequest: PropTypes.func.isRequired,
   changeVerificationRequest: PropTypes.func.isRequired,
   changePasswordRequest: PropTypes.func.isRequired,
+  userDeleteRequest: PropTypes.func.isRequired
 };

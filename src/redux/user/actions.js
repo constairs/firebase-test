@@ -2,11 +2,11 @@ import * as TYPES from './types';
 
 export const userCreateRequest = createUserData => ({
   type: TYPES.USER_CREATE_REQUEST,
-  payload: createUserData,
+  payload: createUserData
 });
 export const userCreateSuccessed = createResponse => ({
   type: TYPES.USER_CREATE_SUCCESSED,
-  payload: createResponse,
+  payload: createResponse
 });
 export const userCreateFailed = error => ({
   type: TYPES.USER_CREATE_FAILED,
@@ -16,11 +16,11 @@ export const userCreateFailed = error => ({
 
 export const userLoginRequest = loginUserData => ({
   type: TYPES.USER_LOGIN_REQUEST,
-  payload: loginUserData,
+  payload: loginUserData
 });
 export const userLoginSuccessed = loginResponse => ({
   type: TYPES.USER_LOGIN_SUCCESSED,
-  payload: loginResponse,
+  payload: loginResponse
 });
 export const userLoginFailed = error => ({
   type: TYPES.USER_LOGIN_FAILED,
@@ -28,7 +28,7 @@ export const userLoginFailed = error => ({
 });
 
 export const userLogoutRequest = () => ({
-  type: TYPES.USER_LOGOUT_REQUEST,
+  type: TYPES.USER_LOGOUT_REQUEST
 });
 export const userLogoutSuccessed = logoutResponse => ({
   type: TYPES.USER_LOGOUT_SUCCESSED,
@@ -41,7 +41,7 @@ export const userLogoutFailed = error => ({
 
 export const userUpdateRequest = updateUserData => ({
   type: TYPES.USER_UPDATE_REQUEST,
-  payload: updateUserData,
+  payload: updateUserData
 });
 export const userUpdateSuccessed = logoutResponse => ({
   type: TYPES.USER_UPDATE_SUCCESSED,
@@ -52,9 +52,21 @@ export const userUpdateFailed = error => ({
   payload: error
 });
 
+export const userDeleteRequest = () => ({
+  type: TYPES.USER_DELETE_REQUEST
+});
+export const userDeleteSuccessed = deleteResponse => ({
+  type: TYPES.USER_DELETE_SUCCESSED,
+  payload: deleteResponse
+});
+export const userDeleteFailed = error => ({
+  type: TYPES.USER_DELETE_FAILED,
+  payload: error
+});
+
 export const changeEmailRequest = email => ({
   type: TYPES.CHANGE_EMAIL_REQUEST,
-  payload: email,
+  payload: email
 });
 export const changeEmailSuccessed = changeEmailResponse => ({
   type: TYPES.CHANGE_EMAIL_SUCCESSED,
@@ -67,7 +79,7 @@ export const changeEmailFailed = error => ({
 
 export const changeVerificationRequest = verificationEmail => ({
   type: TYPES.CHANGE_VERIFICATION_REQUEST,
-  payload: verificationEmail,
+  payload: verificationEmail
 });
 export const changeVerificationSuccessed = changeVerificationResponse => ({
   type: TYPES.CHANGE_VERIFICATION_SUCCESSED,
@@ -78,9 +90,9 @@ export const changeVerificationFailed = error => ({
   payload: error
 });
 
-export const changePasswordRequest = verificationEmail => ({
+export const changePasswordRequest = password => ({
   type: TYPES.CHANGE_PASSWORD_REQUEST,
-  payload: verificationEmail,
+  payload: password
 });
 export const changePasswordSuccessed = changeVerificationResponse => ({
   type: TYPES.CHANGE_PASSWORD_SUCCESSED,
@@ -92,5 +104,5 @@ export const changePasswordFailed = error => ({
 });
 
 export const closeNotification = () => ({
-  type: TYPES.USER_CLOSE_NOTIFICATION,
+  type: TYPES.USER_CLOSE_NOTIFICATION
 });

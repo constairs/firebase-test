@@ -36,6 +36,9 @@ const userLoginSuccessed = response => pipe(
   assoc('userFetching', false),
   assoc('authData', response.user.email),
   assoc('logged', true),
+  assoc('email', response.user.email),
+  assoc('photoURL', response.user.photoURL),
+  assoc('displayName', response.user.displayName),
   assocPath(['notification', 'show'], true),
   assocPath(['notification', 'success'], `${response.user.email} успешно вошел`),
 );
@@ -49,6 +52,9 @@ const userLogoutRequest = () => assoc('userFetching', true);
 const userLogoutSuccessed = logoutResponse => pipe(
   assoc('userFetching', false),
   assoc('authData', ''),
+  assoc('email', ''),
+  assoc('photoURL', ''),
+  assoc('displayName', ''),
   assocPath(['notification', 'show'], true),
   assocPath(['notification', 'success'], logoutResponse),
   assoc('logged', false),
@@ -68,6 +74,23 @@ const userUpdateSuccessed = updateResponse => pipe(
   assocPath(['notification', 'success'], 'Профиль успешно обновлен'),
 );
 const userUpdateFailed = error => pipe(
+  assoc('userFetching', false),
+  assocPath(['notification', 'show'], true),
+  assocPath(['notification', 'error'], error),
+);
+
+const userDeleteRequest = () => assoc('userFetching', true);
+const userDeleteSuccessed = deleteResponse => pipe(
+  assoc('userFetching', false),
+  assoc('authData', ''),
+  assoc('email', ''),
+  assoc('photoURL', ''),
+  assoc('displayName', ''),
+  assoc('logged', false),
+  assocPath(['notification', 'show'], true),
+  assocPath(['notification', 'success'], deleteResponse),
+);
+const userDeleteFailed = error => pipe(
   assoc('userFetching', false),
   assocPath(['notification', 'show'], true),
   assocPath(['notification', 'error'], error),
@@ -135,6 +158,10 @@ const handlers = {
   [TYPES.USER_UPDATE_REQUEST]: userUpdateRequest,
   [TYPES.USER_UPDATE_SUCCESSED]: userUpdateSuccessed,
   [TYPES.USER_UPDATE_FAILED]: userUpdateFailed,
+
+  [TYPES.USER_DELETE_REQUEST]: userDeleteRequest,
+  [TYPES.USER_DELETE_SUCCESSED]: userDeleteSuccessed,
+  [TYPES.USER_DELETE_FAILED]: userDeleteFailed,
 
   [TYPES.CHANGE_EMAIL_REQUEST]: changeEmailRequest,
   [TYPES.CHANGE_EMAIL_SUCCESSED]: changeEmailSuccessed,

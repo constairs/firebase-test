@@ -13,7 +13,7 @@ import { UpdateUserForm } from '../../components/UpdateUserForm';
 
 class Profile extends React.Component {
   state = {
-    showModal: false,
+    showModal: false
   }
 
   handleLogout = () => {
@@ -23,13 +23,13 @@ class Profile extends React.Component {
   handleUpdate = (updateUserData) => {
     this.props.userUpdateRequest(updateUserData);
     this.setState({
-      showModal: false,
+      showModal: false
     });
   }
 
   handleShowModal = () => {
     this.setState({
-      showModal: true,
+      showModal: true
     });
   }
 
@@ -72,7 +72,7 @@ export const UserProfile = connect(
   }),
   dispatch => ({
     userLogoutRequest: bindActionCreators(userLogoutRequest, dispatch),
-    userUpdateRequest: bindActionCreators(userUpdateRequest, dispatch),
+    userUpdateRequest: bindActionCreators(userUpdateRequest, dispatch)
   })
 )(Profile);
 
@@ -80,5 +80,5 @@ export const UserProfile = connect(
 Profile.propTypes = {
   userLogoutRequest: PropTypes.func.isRequired,
   userUpdateRequest: PropTypes.func.isRequired,
-  user: PropTypes.objectOf(PropTypes.any).isRequired,
+  user: PropTypes.objectOf(PropTypes.any).isRequired
 };

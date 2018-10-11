@@ -30,6 +30,21 @@ export function signInWithEmailAndPassword(email, password) {
   });
 }
 
+export function reAuth() {
+  return new Promise((resolve, reject) => {
+    const user = firebase.auth().currentUser;
+    let credential;
+
+    // Prompt the user to re-provide their sign-in credentials
+
+    user.reauthenticateAndRetrieveDataWithCredential(credential).then(() => {
+      resolve(user);
+    }).catch((error) => {
+      reject(error);
+    });
+  });
+}
+
 export function signOut() {
   return new Promise((resolve, reject) => {
     firebase.auth().signOut().then(() => {
@@ -51,6 +66,24 @@ export function updateProfile(profileName, profileImg) {
       resolve({ profileName, profileImg });
     }).catch((error) => {
       reject(error);
+    });
+  });
+}
+
+export function deleteProfile() {
+  return new Promise((resolve, reject) => {
+    const user = firebase.auth().currentUser;
+
+    user.delete().then(() => {
+      resolve('User deleted successully!');
+    }).catch((error) => {
+      if (error.code === 'auth/requires-recent-login') {
+        reAuth()
+          .then(() => {
+            user.delete().then(() => resolve('User deleted successully!'));
+          })
+          .catch((err) => { reject(err); });
+      }
     });
   });
 }
@@ -82,7 +115,6 @@ export function updateVerification(email) {
 export function updatePassword(newPassword) {
   return new Promise((resolve, reject) => {
     const user = firebase.auth().currentUser;
-    // const newPassword = getASecureRandomPassword();
 
     user.updatePassword(newPassword).then(() => {
       resolve('Password changed successufuly!');
