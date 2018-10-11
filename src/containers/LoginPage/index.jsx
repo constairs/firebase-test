@@ -8,6 +8,7 @@ import { LoginForm } from '../../components/LoginForm';
 import { ResetForm } from '../../components/ResetForm';
 import { UserNotification } from '../UserNotification';
 import { Modal } from '../../components/Modal';
+import { StyledLoginPage } from './index.styles';
 
 class Login extends React.Component {
   state = {
@@ -35,7 +36,7 @@ class Login extends React.Component {
   render() {
     const { showResetModal } = this.state;
     return (
-      <div id="root">
+      <StyledLoginPage>
         <UserNotification />
         <LoginForm
           onLoginUser={this.handleLoginUser}
@@ -46,7 +47,7 @@ class Login extends React.Component {
           show={showResetModal}
           onResetPassword={this.handleResetPassword}
         />
-      </div>
+      </StyledLoginPage>
     );
   }
 }

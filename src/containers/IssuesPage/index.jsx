@@ -4,63 +4,16 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { history } from '../../redux/store';
 
-
-import {
-  changeEmailRequest,
-  sendVerificationRequest,
-  changePasswordRequest,
-  userDeleteRequest
-} from '../../redux/user/actions';
+import { fetchIssuesRequest } from '../../redux/issues/actions';
 
 import { Page } from '../../components/UI/Page';
 import { Button } from '../../components/UI/Button';
+import { IssuesNotification } from '../IssuesNotification';
+import { IssueList } from '../../components/IssueList';
 
 class Issues extends React.Component {
-  state = {
-    showChangeEmail: false,
-    showSendVerification: false,
-    showChangePassword: false,
-    changeEmailInput: '',
-    sendVerification: '',
-    changePassword: ''
-  }
-
-  handleChangeButton = ({ target }) => {
-    const { name } = target;
-    this.setState({
-      [name]: !this.state[name]
-    });
-  }
-
-  handleChangeInput = ({ target }) => {
-    const { name, value } = target;
-    this.setState({
-      [name]: value
-    });
-  }
-
-  changeEmailRequest = (e) => {
-    e.preventDefault();
-    this.props.changeEmailRequest(this.state.changeEmailInput);
-    this.setState({
-      changeEmailInput: ''
-    });
-  }
-
-  sendVerificationRequest = (e) => {
-    e.preventDefault();
-    this.props.sendVerificationRequest(this.state.changeVerification);
-    this.setState({
-      showSendVerification: ''
-    });
-  }
-
-  changePasswordRequest = (e) => {
-    e.preventDefault();
-    this.props.changePasswordRequest(this.state.changePassword);
-    this.setState({
-      changePassword: ''
-    });
+  componentWillMount() {
+    this.props.fetchIssuesRequest();
   }
 
   addNesIssue = () => {
@@ -68,12 +21,27 @@ class Issues extends React.Component {
   }
 
   render() {
+    const { issues, issuesFetching } = this.props.issues;
     return (
       <Page>
-        <div>
-          <h1>No issues</h1>
-          <Button onClick={this.addNesIssue}>New issue</Button>
-        </div>
+        { issues.length > 0 && !issuesFetching ?
+        (
+          <div>
+            <IssueList issues={issues} />
+            <Button onClick={this.addNesIssue}>New issue</Button>
+          </div>
+
+        )
+        :
+        (
+          <div>
+            {issuesFetching ? <h1>Fetching...</h1> : <h1>No issues</h1>}
+            <Button onClick={this.addNesIssue}>New issue</Button>
+          </div>
+        )
+        }
+
+        <IssuesNotification />
       </Page>
     );
   }
@@ -81,19 +49,15 @@ class Issues extends React.Component {
 
 export const IssuesPage = connect(
   state => ({
-    user: state.persistedUser
+    issues: state.issues
   }),
   dispatch => ({
-    changeEmailRequest: bindActionCreators(changeEmailRequest, dispatch),
-    sendVerificationRequest: bindActionCreators(sendVerificationRequest, dispatch),
-    changePasswordRequest: bindActionCreators(changePasswordRequest, dispatch),
-    userDeleteRequest: bindActionCreators(userDeleteRequest, dispatch)
+    fetchIssuesRequest: bindActionCreators(fetchIssuesRequest, dispatch)
   })
 )(Issues);
 
 
 Issues.propTypes = {
-  changeEmailRequest: PropTypes.func.isRequired,
-  sendVerificationRequest: PropTypes.func.isRequired,
-  changePasswordRequest: PropTypes.func.isRequired,
+  fetchIssuesRequest: PropTypes.func.isRequired,
+  issues: PropTypes.objectOf(PropTypes.any).isRequired,
 };

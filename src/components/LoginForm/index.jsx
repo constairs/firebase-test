@@ -2,7 +2,7 @@ import React from 'react';
 import { PropTypes } from 'prop-types';
 
 import { Input } from '../UI/Input';
-import { Form } from '../UI/Form';
+import { StyledLoginForm } from './index.styles';
 import { Label } from '../UI/Label';
 import { Button } from '../UI/Button';
 import { ALink } from '../UI/ALink';
@@ -34,7 +34,7 @@ export class LoginForm extends React.Component {
   render() {
     const { emailInput, passwordInput } = this.state;
     return (
-      <Form onSubmit={this.handleSubmit}>
+      <StyledLoginForm onSubmit={this.handleSubmit}>
         <Label htmlFor="email">
           <span>Email</span>
           <Input id="email" name="emailInput" onChange={this.handleChangeInput} value={emailInput} />
@@ -45,7 +45,7 @@ export class LoginForm extends React.Component {
         </Label>
         <ALink onClick={this.props.onResetPassword}>Забыли пароль?</ALink>
         <Button>Login</Button>
-      </Form>
+      </StyledLoginForm>
     );
   }
 }

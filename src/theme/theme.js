@@ -4,8 +4,7 @@ export const colors = {
   greyHover: '#d6d4d4',
   dGrey: '#cacaca',
   black: '#2b2b2b',
-  main: '#40c9ff',
-  mainDarken: 'darken(#40c9ff, 6%)',
+  main: '#e8a619',
   accent: '#e36209',
   blank: '#ffffff',
 };

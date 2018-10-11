@@ -47,7 +47,7 @@ export function* userCreateSaga(action) {
   try {
     const createResponse = yield call(createUserWithEmailAndPassword, ...action.payload);
     yield put(userCreateSuccessed(createResponse));
-    yield push('/profile');
+    yield put(push('/profile'));
   } catch (error) {
     yield put(userCreateFailed(error.message));
   }
@@ -57,7 +57,7 @@ export function* userLoginSaga(action) {
   try {
     const loginResponse = yield call(signInWithEmailAndPassword, ...action.payload);
     yield put(userLoginSuccessed(loginResponse));
-    yield push('/profile');
+    yield put(push('/profile'));
   } catch (error) {
     yield put(userLoginFailed(error.message));
   }
@@ -67,7 +67,7 @@ export function* userLogoutSaga() {
   try {
     const logoutResponse = yield call(signOut);
     yield put(userLogoutSuccessed(logoutResponse));
-    yield push('/login');
+    yield put(push('/login'));
   } catch (error) {
     yield put(userLogoutFailed(error.message));
   }
@@ -86,7 +86,7 @@ export function* userDeleteSaga() {
   try {
     const deleteResponse = yield call(deleteProfile);
     yield put(userDeleteSuccessed(deleteResponse));
-    yield push('/auth');
+    yield put(push('/auth'));
   } catch (error) {
     yield put(userDeleteFailed(error));
   }

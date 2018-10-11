@@ -1,4 +1,4 @@
-import { assoc, assocPath, pipe, append, lensProp, over } from 'ramda';
+import { assoc, assocPath, pipe, append, lensProp, set, over, values } from 'ramda';
 
 import { createReducer } from '../../utils/reducerUtils';
 import * as TYPES from './types';
@@ -29,11 +29,32 @@ const createIssueFailed = error => pipe(
   assocPath(['notification', 'error'], error),
 );
 
+const fetchIssuesRequest = () => assoc('issuesFetching', true);
+const fetchIssuesSuccessed = fetchResponse => pipe(
+  assoc('issuesFetching', false),
+  set(issuesLens, values(fetchResponse))
+);
+const fetchIssuesFailed = error => pipe(
+  assoc('issuesFetching', false),
+  assocPath(['notification', 'show'], true),
+  assocPath(['notification', 'error'], error),
+);
+
+const issuesCloseNotification = () => pipe(
+  assocPath(['notification', 'show'], false),
+  assocPath(['notification', 'error'], ''),
+  assocPath(['notification', 'success'], ''),
+);
 
 const handlers = {
   [TYPES.CREATE_ISSUE_REQUEST]: createIssueRequest,
   [TYPES.CREATE_ISSUE_SUCCESSED]: createIssueSuccessed,
   [TYPES.CREATE_ISSUE_FAILED]: createIssueFailed,
+  [TYPES.FETCH_ISSUES_REQUEST]: fetchIssuesRequest,
+  [TYPES.FETCH_ISSUES_SUCCESSED]: fetchIssuesSuccessed,
+  [TYPES.FETCH_ISSUES_FAILED]: fetchIssuesFailed,
+
+  [TYPES.ISSUES_CLOSE_NOTIFICATION]: issuesCloseNotification,
 };
 
 export const issues = createReducer(initState, handlers);

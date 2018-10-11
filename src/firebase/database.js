@@ -23,3 +23,15 @@ export function createIssueData(createdAt, issueTitle, issueDescription) {
     .catch((error) => reject(error));
   });
 }
+
+export function fetchIssues() {
+  return new Promise((resolve, reject) => {
+    firebase.database().ref('/issues/').once('value')
+    .then((snapshot) => {
+      resolve(snapshot.val());
+    })
+    .catch((error) => reject(error));
+  });
+}
+
+

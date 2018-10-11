@@ -6,6 +6,7 @@ import { userCreateRequest } from '../../redux/user/actions';
 
 import { AuthForm } from '../../components/AuthForm';
 import { UserNotification } from '../UserNotification';
+import { StyledAuthPage } from './index.styles';
 
 class Auth extends React.Component {
   handleCreateUser = (createUserData) => {
@@ -14,10 +15,10 @@ class Auth extends React.Component {
 
   render() {
     return (
-      <div id="root">
+      <StyledAuthPage>
         <AuthForm onCreateUser={this.handleCreateUser} />
         <UserNotification />
-      </div>
+      </StyledAuthPage>
     );
   }
 }
