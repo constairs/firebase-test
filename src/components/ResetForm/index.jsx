@@ -5,12 +5,10 @@ import { Input } from '../UI/Input';
 import { Form } from '../UI/Form';
 import { Label } from '../UI/Label';
 import { Button } from '../UI/Button';
-import { ALink } from '../UI/ALink';
 
-export class LoginForm extends React.Component {
+export class ResetForm extends React.Component {
   state = {
     emailInput: '',
-    passwordInput: ''
   };
 
   handleChangeInput = ({ target }) => {
@@ -20,37 +18,28 @@ export class LoginForm extends React.Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    const loginUserData = [
-      this.state.emailInput,
-      this.state.passwordInput
-    ];
-    this.props.onLoginUser(loginUserData);
+    this.props.onResetPassword(this.state.emailInput);
     this.setState({
       emailInput: '',
-      passwordInput: ''
     });
   }
 
   render() {
-    const { emailInput, passwordInput } = this.state;
+    const { emailInput } = this.state;
     return (
+
+
       <Form onSubmit={this.handleSubmit}>
         <Label htmlFor="email">
           <span>Email</span>
           <Input id="email" name="emailInput" onChange={this.handleChangeInput} value={emailInput} />
         </Label>
-        <Label htmlFor="password">
-          <span>Password</span>
-          <Input id="password" name="passwordInput" onChange={this.handleChangeInput} value={passwordInput} />
-        </Label>
-        <ALink onClick={this.props.onResetPassword}>Забыли пароль?</ALink>
-        <Button>Login</Button>
+        <Button>Send</Button>
       </Form>
     );
   }
 }
 
-LoginForm.propTypes = {
-  onLoginUser: PropTypes.func.isRequired,
+ResetForm.propTypes = {
   onResetPassword: PropTypes.func.isRequired
 };

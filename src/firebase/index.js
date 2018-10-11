@@ -100,12 +100,12 @@ export function updateEmail(email) {
   });
 }
 
-export function updateVerification(email) {
+export function sendVerification() {
   return new Promise((resolve, reject) => {
     const user = firebase.auth().currentUser;
 
     user.sendEmailVerification().then(() => {
-      resolve(email);
+      resolve('Email успешно отправлен');
     }).catch((error) => {
       reject(error);
     });
@@ -118,6 +118,18 @@ export function updatePassword(newPassword) {
 
     user.updatePassword(newPassword).then(() => {
       resolve('Password changed successufuly!');
+    }).catch((error) => {
+      reject(error);
+    });
+  });
+}
+
+export function resetPassword(emailAddress) {
+  return new Promise((resolve, reject) => {
+    const auth = firebase.auth();
+
+    auth.sendPasswordResetEmail(emailAddress).then(() => {
+      resolve('Reset password email sended successfully!');
     }).catch((error) => {
       reject(error);
     });

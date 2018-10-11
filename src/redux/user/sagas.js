@@ -6,8 +6,9 @@ import {
   USER_UPDATE_REQUEST,
   USER_DELETE_REQUEST,
   CHANGE_EMAIL_REQUEST,
-  CHANGE_VERIFICATION_REQUEST,
+  SEND_VERIFICATION_REQUEST,
   CHANGE_PASSWORD_REQUEST,
+  RESET_PASSWORD_REQUEST
 } from './types';
 import {
   userCreateSuccessed,
@@ -18,14 +19,16 @@ import {
   userLogoutFailed,
   userUpdateSuccessed,
   userUpdateFailed,
-  changeEmailSuccessed,
-  changeEmailFailed,
-  changeVerificationSuccessed,
-  changeVerificationFailed,
-  changePasswordSuccessed,
-  changePasswordFailed,
   userDeleteSuccessed,
   userDeleteFailed,
+  changeEmailSuccessed,
+  changeEmailFailed,
+  sendVerificationSuccessed,
+  sendVerificationFailed,
+  changePasswordSuccessed,
+  changePasswordFailed,
+  resetPasswordSuccessed,
+  resetPasswordFailed
 } from './actions';
 import {
   createUserWithEmailAndPassword,
@@ -34,8 +37,9 @@ import {
   updateProfile,
   deleteProfile,
   updateEmail,
-  updateVerification,
+  sendVerification,
   updatePassword,
+  resetPassword
 } from '../../firebase/';
 
 export function* userCreateSaga(action) {
@@ -92,12 +96,12 @@ export function* changeEmailSaga(action) {
   }
 }
 
-export function* changeVerificationSaga(action) {
+export function* sendVerificationSaga(action) {
   try {
-    const changeResponse = yield call(updateVerification, action.payload);
-    yield put(changeVerificationSuccessed(changeResponse));
+    const sendVerficationResponse = yield call(sendVerification, action.payload);
+    yield put(sendVerificationSuccessed(sendVerficationResponse));
   } catch (error) {
-    yield put(changeVerificationFailed(error));
+    yield put(sendVerificationFailed(error));
   }
 }
 
@@ -110,6 +114,15 @@ export function* changePasswordSaga(action) {
   }
 }
 
+export function* resetPasswordSaga(action) {
+  try {
+    const resetResponse = yield call(resetPassword, action.payload);
+    yield put(resetPasswordSuccessed(resetResponse));
+  } catch (error) {
+    yield put(resetPasswordFailed(error));
+  }
+}
+
 export function* userSagas() {
   yield takeLatest(USER_CREATE_REQUEST, userCreateSaga);
   yield takeLatest(USER_LOGIN_REQUEST, userLoginSaga);
@@ -117,6 +130,7 @@ export function* userSagas() {
   yield takeLatest(USER_UPDATE_REQUEST, userUpdateSaga);
   yield takeLatest(USER_DELETE_REQUEST, userDeleteSaga);
   yield takeLatest(CHANGE_EMAIL_REQUEST, changeEmailSaga);
-  yield takeLatest(CHANGE_VERIFICATION_REQUEST, changeVerificationSaga);
+  yield takeLatest(SEND_VERIFICATION_REQUEST, sendVerificationSaga);
   yield takeLatest(CHANGE_PASSWORD_REQUEST, changePasswordSaga);
+  yield takeLatest(RESET_PASSWORD_REQUEST, resetPasswordSaga);
 }

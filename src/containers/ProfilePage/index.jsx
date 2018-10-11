@@ -8,7 +8,7 @@ import { UserNotification } from '../UserNotification';
 
 import {
   changeEmailRequest,
-  changeVerificationRequest,
+  sendVerificationRequest,
   changePasswordRequest,
   userDeleteRequest
 } from '../../redux/user/actions';
@@ -21,10 +21,10 @@ import { Form } from '../../components/UI/Form';
 class Profile extends React.Component {
   state = {
     showChangeEmail: false,
-    showChangeVerification: false,
+    showSendVerification: false,
     showChangePassword: false,
     changeEmailInput: '',
-    changeVerification: '',
+    sendVerification: '',
     changePassword: ''
   }
 
@@ -50,11 +50,11 @@ class Profile extends React.Component {
     });
   }
 
-  changeVerificationRequest = (e) => {
+  sendVerificationRequest = (e) => {
     e.preventDefault();
-    this.props.changeVerificationRequest(this.state.changeVerification);
+    this.props.sendVerificationRequest(this.state.changeVerification);
     this.setState({
-      changeVerification: ''
+      showSendVerification: ''
     });
   }
 
@@ -69,10 +69,10 @@ class Profile extends React.Component {
   render() {
     const {
       showChangeEmail,
-      showChangeVerification,
+      showSendVerification,
       showChangePassword,
       changeEmailInput,
-      changeVerification,
+      sendVerification,
       changePassword
     } = this.state;
     return (
@@ -90,10 +90,10 @@ class Profile extends React.Component {
             : null }
           </p>
           <p>
-            <Button name="showChangeVerification" onClick={this.handleChangeButton}>Изменить email для входа</Button>
-            { showChangeVerification ?
-              <Form onSubmit={this.changeVerificationRequest}>
-                <Input name="changeVerification" value={changeVerification} onChange={this.handleChangeInput} />
+            <Button name="showSendVerification" onClick={this.handleChangeButton}>Подтвердить email для входа</Button>
+            { showSendVerification ?
+              <Form onSubmit={this.sendVerificationRequest}>
+                <Input name="sendVerification" value={sendVerification} onChange={this.handleChangeInput} />
                 <Button>Send</Button>
               </Form>
             : null }
@@ -122,7 +122,7 @@ export const ProfilePage = connect(
   }),
   dispatch => ({
     changeEmailRequest: bindActionCreators(changeEmailRequest, dispatch),
-    changeVerificationRequest: bindActionCreators(changeVerificationRequest, dispatch),
+    sendVerificationRequest: bindActionCreators(sendVerificationRequest, dispatch),
     changePasswordRequest: bindActionCreators(changePasswordRequest, dispatch),
     userDeleteRequest: bindActionCreators(userDeleteRequest, dispatch)
   })
@@ -131,7 +131,7 @@ export const ProfilePage = connect(
 
 Profile.propTypes = {
   changeEmailRequest: PropTypes.func.isRequired,
-  changeVerificationRequest: PropTypes.func.isRequired,
+  sendVerificationRequest: PropTypes.func.isRequired,
   changePasswordRequest: PropTypes.func.isRequired,
   userDeleteRequest: PropTypes.func.isRequired
 };

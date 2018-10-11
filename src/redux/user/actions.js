@@ -77,16 +77,16 @@ export const changeEmailFailed = error => ({
   payload: error
 });
 
-export const changeVerificationRequest = verificationEmail => ({
-  type: TYPES.CHANGE_VERIFICATION_REQUEST,
+export const sendVerificationRequest = verificationEmail => ({
+  type: TYPES.SEND_VERIFICATION_REQUEST,
   payload: verificationEmail
 });
-export const changeVerificationSuccessed = changeVerificationResponse => ({
-  type: TYPES.CHANGE_VERIFICATION_SUCCESSED,
-  payload: changeVerificationResponse
+export const sendVerificationSuccessed = sendVerficationResponse => ({
+  type: TYPES.SEND_VERIFICATION_SUCCESSED,
+  payload: sendVerficationResponse
 });
-export const changeVerificationFailed = error => ({
-  type: TYPES.CHANGE_VERIFICATION_FAILED,
+export const sendVerificationFailed = error => ({
+  type: TYPES.SEND_VERIFICATION_FAILED,
   payload: error
 });
 
@@ -94,12 +94,25 @@ export const changePasswordRequest = password => ({
   type: TYPES.CHANGE_PASSWORD_REQUEST,
   payload: password
 });
-export const changePasswordSuccessed = changeVerificationResponse => ({
+export const changePasswordSuccessed = changePasswordResponse => ({
   type: TYPES.CHANGE_PASSWORD_SUCCESSED,
-  payload: changeVerificationResponse
+  payload: changePasswordResponse
 });
 export const changePasswordFailed = error => ({
   type: TYPES.CHANGE_PASSWORD_FAILED,
+  payload: error
+});
+
+export const resetPasswordRequest = emailAddress => ({
+  type: TYPES.RESET_PASSWORD_REQUEST,
+  payload: emailAddress
+});
+export const resetPasswordSuccessed = resetPasswordResponse => ({
+  type: TYPES.RESET_PASSWORD_SUCCESSED,
+  payload: resetPasswordResponse
+});
+export const resetPasswordFailed = error => ({
+  type: TYPES.RESET_PASSWORD_FAILED,
   payload: error
 });
 

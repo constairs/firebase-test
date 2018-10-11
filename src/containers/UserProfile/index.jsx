@@ -35,7 +35,7 @@ class Profile extends React.Component {
 
   render() {
     const {
-      authData,
+      email,
       photoURL,
       displayName
     } = this.props.user;
@@ -53,9 +53,9 @@ class Profile extends React.Component {
           {
             displayName ? <p>{displayName}</p> : null
           }
-          <p>{authData}</p>
+          <p>{email}</p>
           {
-          authData ?
+          email ?
             <button type="button" onClick={this.handleLogout}>Logout</button>
           : null
           }

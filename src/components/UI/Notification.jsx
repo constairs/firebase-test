@@ -12,7 +12,8 @@ export const Notification = styled.div`
   position: fixed;
   top: 50px;
   right: 20px;
-  ${props => (props.show ? 'display:block;' : 'display: none;')}
+  transition: opacity .1s;
+  ${props => (props.show ? 'transform: translateY(0px); opacity: 1;' : 'transform: translateY(20px); opacity: 0;')}
   ${CloseBtn} {
     position: absolute;
     top: 5px;

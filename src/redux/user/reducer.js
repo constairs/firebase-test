@@ -5,7 +5,6 @@ import * as TYPES from './types';
 
 export const initState = {
   userFetching: false,
-  authData: '',
   email: '',
   photoURL: '',
   displayName: '',
@@ -20,7 +19,7 @@ export const initState = {
 const userCreateRequest = () => assoc('userFetching', true);
 const userCreateSuccessed = response => pipe(
   assoc('userFetching', false),
-  assoc('authData', response.user.email),
+  assoc('email', response.user.email),
   assoc('logged', true),
   assocPath(['notification', 'show'], true),
   assocPath(['notification', 'success'], `${response.user.email} успешно зарегистрирован`),
@@ -34,7 +33,6 @@ const userCreateFailed = error => pipe(
 const userLoginRequest = () => assoc('userFetching', true);
 const userLoginSuccessed = response => pipe(
   assoc('userFetching', false),
-  assoc('authData', response.user.email),
   assoc('logged', true),
   assoc('email', response.user.email),
   assoc('photoURL', response.user.photoURL),
@@ -51,7 +49,6 @@ const userLoginFailed = error => pipe(
 const userLogoutRequest = () => assoc('userFetching', true);
 const userLogoutSuccessed = logoutResponse => pipe(
   assoc('userFetching', false),
-  assoc('authData', ''),
   assoc('email', ''),
   assoc('photoURL', ''),
   assoc('displayName', ''),
@@ -82,7 +79,6 @@ const userUpdateFailed = error => pipe(
 const userDeleteRequest = () => assoc('userFetching', true);
 const userDeleteSuccessed = deleteResponse => pipe(
   assoc('userFetching', false),
-  assoc('authData', ''),
   assoc('email', ''),
   assoc('photoURL', ''),
   assoc('displayName', ''),
@@ -116,14 +112,26 @@ const changeEmailFailed = error => pipe(
   assocPath(['notification', 'error'], error),
 );
 
-const changeVerificationRequest = () => assoc('userFetching', true);
-const changeVerificationSuccessed = changeEmailResponse => pipe(
+const sendVerificationRequest = () => assoc('userFetching', true);
+const sendVerificationSuccessed = sendVerficationResponse => pipe(
   assoc('userFetching', false),
-  assoc('authData', changeEmailResponse),
   assocPath(['notification', 'show'], true),
-  assocPath(['notification', 'success'], 'Email успешно обновлен'),
+  assocPath(['notification', 'success'], sendVerficationResponse),
 );
-const changeVerificationFailed = error => pipe(
+const sendVerificationFailed = error => pipe(
+  assoc('userFetching', false),
+  assocPath(['notification', 'show'], true),
+  assocPath(['notification', 'error'], error),
+);
+
+
+const resetPasswordRequest = () => assoc('userFetching', true);
+const resetPasswordSuccessed = resetPasswordResponse => pipe(
+  assoc('userFetching', false),
+  assocPath(['notification', 'show'], true),
+  assocPath(['notification', 'success'], resetPasswordResponse),
+);
+const resetPasswordFailed = error => pipe(
   assoc('userFetching', false),
   assocPath(['notification', 'show'], true),
   assocPath(['notification', 'error'], error),
@@ -131,10 +139,10 @@ const changeVerificationFailed = error => pipe(
 
 
 const changePasswordRequest = () => assoc('userFetching', true);
-const changePasswordSuccessed = changeEmailResponse => pipe(
+const changePasswordSuccessed = changePasswordResponse => pipe(
   assoc('userFetching', false),
   assocPath(['notification', 'show'], true),
-  assocPath(['notification', 'success'], changeEmailResponse),
+  assocPath(['notification', 'success'], changePasswordResponse),
 );
 const changePasswordFailed = error => pipe(
   assoc('userFetching', false),
@@ -167,13 +175,17 @@ const handlers = {
   [TYPES.CHANGE_EMAIL_SUCCESSED]: changeEmailSuccessed,
   [TYPES.CHANGE_EMAIL_FAILED]: changeEmailFailed,
 
-  [TYPES.CHANGE_VERIFICATION_REQUEST]: changeVerificationRequest,
-  [TYPES.CHANGE_VERIFICATION_SUCCESSED]: changeVerificationSuccessed,
-  [TYPES.CHANGE_VERIFICATION_FAILED]: changeVerificationFailed,
+  [TYPES.SEND_VERIFICATION_REQUEST]: sendVerificationRequest,
+  [TYPES.SEND_VERIFICATION_SUCCESSED]: sendVerificationSuccessed,
+  [TYPES.SEND_VERIFICATION_FAILED]: sendVerificationFailed,
 
   [TYPES.CHANGE_PASSWORD_REQUEST]: changePasswordRequest,
   [TYPES.CHANGE_PASSWORD_SUCCESSED]: changePasswordSuccessed,
   [TYPES.CHANGE_PASSWORD_FAILED]: changePasswordFailed,
+
+  [TYPES.RESET_PASSWORD_REQUEST]: resetPasswordRequest,
+  [TYPES.RESET_PASSWORD_SUCCESSED]: resetPasswordSuccessed,
+  [TYPES.RESET_PASSWORD_FAILED]: resetPasswordFailed,
 
   [TYPES.USER_CLOSE_NOTIFICATION]: userCloseNotification,
 };
