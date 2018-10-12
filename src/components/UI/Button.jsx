@@ -9,7 +9,7 @@ export const Button = styled.button`
   border: none;
   border-radius: 3px;
   color: ${colors.light};
-  padding: 10px 0;
+  padding: 10px 12px;
   letter-spacing: 1px;
   font-size: 14px;
 `;

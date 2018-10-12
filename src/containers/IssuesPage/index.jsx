@@ -2,22 +2,44 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
+import styled from 'styled-components';
 import { history } from '../../redux/store';
 
-import { fetchIssuesRequest } from '../../redux/issues/actions';
+import { fetchIssuesRequest, deleteIssueRequest, editIssueRequest, getIssueRequest } from '../../redux/issues/actions';
 
 import { Page } from '../../components/UI/Page';
+import { Spinner } from '../../components/UI/Spinner';
 import { Button } from '../../components/UI/Button';
 import { IssuesNotification } from '../IssuesNotification';
 import { IssueList } from '../../components/IssueList';
+import { IssuePage } from '../IssuePage';
+
+const Preloader = styled.div`
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  padding: 20px 0;
+`;
 
 class Issues extends React.Component {
   componentWillMount() {
     this.props.fetchIssuesRequest();
   }
 
-  addNesIssue = () => {
+  addNewIssue = () => {
     history.push('/issues/new');
+  }
+
+  handleDelete = (issueId) => {
+    this.props.deleteIssueRequest(issueId);
+  }
+
+  handleGetIssue = (issueId) => {
+    this.props.getIssueRequest(issueId);
+  }
+
+  handleEdit = (issueId) => {
+    this.props.editIssueRequest(issueId);
   }
 
   render() {
@@ -27,21 +49,26 @@ class Issues extends React.Component {
         { issues.length > 0 && !issuesFetching ?
         (
           <div>
-            <IssueList issues={issues} />
-            <Button onClick={this.addNesIssue}>New issue</Button>
+            <IssueList
+              issues={issues}
+              onEditIssue={this.handleEdit}
+              onDeleteIssue={this.handleDelete}
+              onGetIssue={this.handleGetIssue}
+            />
+            <Button onClick={this.addNewIssue}>New issue</Button>
           </div>
 
         )
         :
         (
           <div>
-            {issuesFetching ? <h1>Fetching...</h1> : <h1>No issues</h1>}
-            <Button onClick={this.addNesIssue}>New issue</Button>
+            {issuesFetching ? <Preloader><Spinner /></Preloader> : <h1>No issues</h1>}
+            <Button onClick={this.addNewIssue}>New issue</Button>
           </div>
         )
         }
-
         <IssuesNotification />
+        <IssuePage />
       </Page>
     );
   }
@@ -52,12 +79,18 @@ export const IssuesPage = connect(
     issues: state.issues
   }),
   dispatch => ({
-    fetchIssuesRequest: bindActionCreators(fetchIssuesRequest, dispatch)
+    fetchIssuesRequest: bindActionCreators(fetchIssuesRequest, dispatch),
+    deleteIssueRequest: bindActionCreators(deleteIssueRequest, dispatch),
+    editIssueRequest: bindActionCreators(editIssueRequest, dispatch),
+    getIssueRequest: bindActionCreators(getIssueRequest, dispatch),
   })
 )(Issues);
 
 
 Issues.propTypes = {
   fetchIssuesRequest: PropTypes.func.isRequired,
+  deleteIssueRequest: PropTypes.func.isRequired,
+  editIssueRequest: PropTypes.func.isRequired,
+  getIssueRequest: PropTypes.func.isRequired,
   issues: PropTypes.objectOf(PropTypes.any).isRequired,
 };

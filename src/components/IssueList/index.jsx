@@ -5,8 +5,12 @@ import { StyledIssuesList } from './index.styles';
 import { IssueListItem } from '../IssueListItem';
 
 export class IssueList extends React.Component {
-  handleClickIssue = () => {
+  handleClickIssue = (issueId) => {
+    this.props.onGetIssue(issueId);
+  }
 
+  handleDeleteIssue = (issueId) => {
+    this.props.onDeleteIssue(issueId);
   }
 
   render() {
@@ -19,7 +23,8 @@ export class IssueList extends React.Component {
             (<IssueListItem
               key={issue.createdAt}
               item={issue}
-              onClikItem={this.handleClickIssue}
+              onClickItem={this.handleClickIssue}
+              onDelete={this.handleDeleteIssue}
             />)
           )
         }
@@ -30,4 +35,6 @@ export class IssueList extends React.Component {
 
 IssueList.propTypes = {
   issues: PropTypes.arrayOf(PropTypes.any).isRequired,
+  onDeleteIssue: PropTypes.func.isRequired,
+  onGetIssue: PropTypes.func.isRequired,
 };

@@ -13,6 +13,49 @@ export const createIssueFailed = error => ({
   payload: error
 });
 
+export const deleteIssueRequest = issueId => ({
+  type: TYPES.DELETE_ISSUE_REQUEST,
+  payload: issueId
+});
+export const deleteIssueSuccessed = createIssueResponse => ({
+  type: TYPES.DELETE_ISSUE_SUCCESSED,
+  payload: createIssueResponse
+});
+export const deleteIssueFailed = error => ({
+  type: TYPES.DELETE_ISSUE_FAILED,
+  payload: error
+});
+
+export const openIssueEditor = issueId => ({
+  type: TYPES.OPEN_ISSUE_EDITOR,
+  payload: issueId
+});
+
+export const getIssueRequest = issueId => ({
+  type: TYPES.GET_ISSUE_REQUEST,
+  payload: issueId
+});
+export const getIssueSuccessed = issue => ({
+  type: TYPES.GET_ISSUE_SUCCESSED,
+  payload: issue
+});
+export const getIssueFailed = error => ({
+  type: TYPES.GET_ISSUE_FAILED,
+  payload: error
+});
+export const editIssueRequest = issueId => ({
+  type: TYPES.EDIT_ISSUE_REQUEST,
+  payload: issueId
+});
+export const editIssueSuccessed = createIssueResponse => ({
+  type: TYPES.EDIT_ISSUE_SUCCESSED,
+  payload: createIssueResponse
+});
+export const editIssueFailed = error => ({
+  type: TYPES.EDIT_ISSUE_FAILED,
+  payload: error
+});
+
 export const fetchIssuesRequest = () => ({
   type: TYPES.FETCH_ISSUES_REQUEST
 });

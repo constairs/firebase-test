@@ -8,14 +8,16 @@ import 'firebase/database';
 
 const database = firebase.database();
 
-export function createIssueData(createdAt, issueTitle, issueDescription) {
+export function createIssueData(issueId, createdAt, issueTitle, issueDescription) {
   return new Promise((resolve, reject) => {
-    firebase.database().ref('issues/' + issueTitle).set({
+    firebase.database().ref('issues/' + issueId).set({
+      issueId: issueId,
       title: issueTitle,
       createdAt: createdAt,
       description: issueDescription
     })
     .then(() => resolve({
+      issueId: issueId,
       title: issueTitle,
       createdAt: createdAt,
       description: issueDescription
@@ -34,4 +36,20 @@ export function fetchIssues() {
   });
 }
 
+export function getIssue(issueId) {
+  return new Promise((resolve, reject) => {
+    firebase.database().ref('/issues/' + issueId).once('value')
+    .then((snapshot) => {
+      resolve(snapshot.val());
+    })
+    .catch((error) => reject(error));
+  });
+}
 
+export function deleteIssueData(issueId) {
+  return new Promise((resolve, reject) => {
+    firebase.database().ref('/issues/' + issueId).remove()
+    .then(() => resolve(issueId))
+    .catch((error) => reject(error));
+  });
+}

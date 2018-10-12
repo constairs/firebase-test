@@ -7,6 +7,7 @@ import { Textarea } from '../UI/Textarea';
 import { Label } from '../UI/Label';
 import { Button } from '../UI/Button';
 
+
 export class CreateIssueForm extends React.Component {
   state = {
     issueTitle: '',
@@ -21,6 +22,7 @@ export class CreateIssueForm extends React.Component {
   handleSubmit = (e) => {
     e.preventDefault();
     const createIssueData = [
+      `id${(+new Date()).toString(16)}`,
       Date.now(),
       this.state.issueTitle,
       this.state.issueDescription,

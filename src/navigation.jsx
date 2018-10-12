@@ -8,6 +8,7 @@ import { LoginPage } from './containers/LoginPage';
 import { ProfilePage } from './containers/ProfilePage';
 import { IssuesPage } from './containers/IssuesPage';
 import { NewIssuePage } from './containers/NewIssuePage';
+import { IssuePage } from './containers/IssuePage';
 import { history } from './redux/store';
 import { Header } from './containers/Header';
 
@@ -51,6 +52,8 @@ export const Navigation = () => (
         <PrivateRoute component={ProfilePage} path="/profile" />
         <PrivateRoute component={IssuesPage} exact path="/issues" />
         <PrivateRoute component={NewIssuePage} exact path="/issues/new" />
+        <PrivateRoute component={IssuePage} exact path="/issues/issue/:id" />
+        <PrivateRoute component={IssuePage} exact path="/issues/issue/:id/edit" />
       </Switch>
     </React.Fragment>
   </ConnectedRouter>
