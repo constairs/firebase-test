@@ -8,7 +8,7 @@ import { history } from '../../redux/store';
 import { createIssueRequest } from '../../redux/issues/actions';
 
 import { Page } from '../../components/UI/Page';
-import { CreateIssueForm } from '../../components/CreateIssueForm';
+import { IssueForm } from '../../components/IssueForm';
 
 
 class NewIssue extends React.Component {
@@ -23,7 +23,8 @@ class NewIssue extends React.Component {
   render() {
     return (
       <Page>
-        <CreateIssueForm onCreateIssue={this.handleCreateIssue} />
+        <h1>Create Issue</h1>
+        <IssueForm onEditIssue={this.handleEditIssue} onCreateIssue={this.handleCreateIssue} />
       </Page>
     );
   }

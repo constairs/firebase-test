@@ -9,19 +9,17 @@ import 'firebase/database';
 const database = firebase.database();
 
 export function createIssueData(issueId, createdAt, issueTitle, issueDescription) {
+
+  const issueData = {
+    issueId: issueId,
+    title: issueTitle,
+    createdAt: createdAt,
+    description: issueDescription
+  };
+
   return new Promise((resolve, reject) => {
-    firebase.database().ref('issues/' + issueId).set({
-      issueId: issueId,
-      title: issueTitle,
-      createdAt: createdAt,
-      description: issueDescription
-    })
-    .then(() => resolve({
-      issueId: issueId,
-      title: issueTitle,
-      createdAt: createdAt,
-      description: issueDescription
-    }))
+    firebase.database().ref('issues/' + issueId).set(issueData)
+    .then(() => resolve(issueData))
     .catch((error) => reject(error));
   });
 }
@@ -51,5 +49,25 @@ export function deleteIssueData(issueId) {
     firebase.database().ref('/issues/' + issueId).remove()
     .then(() => resolve(issueId))
     .catch((error) => reject(error));
+  });
+}
+
+export function editIssueData(issueId, createdAt, issueTitle, issueDescription, updatedAt) {
+
+  const updateIssue = {
+    issueId: issueId,
+    title: issueTitle,
+    createdAt: createdAt,
+    updatedAt: updatedAt,
+    description: issueDescription
+  };
+
+  return new Promise((resolve, reject) => {
+    firebase.database().ref('/issues/' + issueId).update(updateIssue, (error) => {
+      if (error) {
+        reject(error);
+      }
+      resolve(updateIssue)
+    });
   });
 }

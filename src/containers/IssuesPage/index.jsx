@@ -12,7 +12,6 @@ import { Spinner } from '../../components/UI/Spinner';
 import { Button } from '../../components/UI/Button';
 import { IssuesNotification } from '../IssuesNotification';
 import { IssueList } from '../../components/IssueList';
-import { IssuePage } from '../IssuePage';
 
 const Preloader = styled.div`
   display: flex;
@@ -68,7 +67,6 @@ class Issues extends React.Component {
         )
         }
         <IssuesNotification />
-        <IssuePage />
       </Page>
     );
   }

@@ -1,4 +1,18 @@
-import { assoc, assocPath, pipe, append, lensProp, set, over, values, filter, when, path, equals } from 'ramda';
+import {
+  assoc,
+  assocPath,
+  pipe,
+  append,
+  lensProp,
+  set,
+  over,
+  values,
+  filter,
+  map,
+  when,
+  path,
+  equals
+} from 'ramda';
 
 import { createReducer } from '../../utils/reducerUtils';
 import * as TYPES from './types';
@@ -22,7 +36,7 @@ const createIssueSuccessed = createResponse => pipe(
   assoc('issueFetching', false),
   over(issuesLens, append(createResponse)),
   assocPath(['notification', 'show'], true),
-  assocPath(['notification', 'success'], `${createResponse.title} успешно создан`),
+  assocPath(['notification', 'success'], `${createResponse.title} created successully!`),
 );
 const createIssueFailed = error => pipe(
   assoc('issueFetching', false),
@@ -42,6 +56,19 @@ const deleteIssueSuccessed = deleteResponse => pipe(
   ),
 );
 const deleteIssueFailed = error => pipe(
+  assoc('issueFetching', false),
+  assocPath(['notification', 'show'], true),
+  assocPath(['notification', 'error'], error),
+);
+
+const editIssueRequest = () => assoc('issueFetching', true);
+const editIssueSuccessed = updatedIssue => pipe(
+  assoc('issueFetching', false),
+  over(issuesLens, map(issue => (issue.issueId === updatedIssue.issueId ? updatedIssue : issue))),
+  assocPath(['notification', 'show'], true),
+  assocPath(['notification', 'success'], `${updatedIssue.title} updated succesfully!`),
+);
+const editIssueFailed = error => pipe(
   assoc('issueFetching', false),
   assocPath(['notification', 'show'], true),
   assocPath(['notification', 'error'], error),
@@ -83,6 +110,10 @@ const handlers = {
   [TYPES.DELETE_ISSUE_REQUEST]: deleteIssueRequest,
   [TYPES.DELETE_ISSUE_SUCCESSED]: deleteIssueSuccessed,
   [TYPES.DELETE_ISSUE_FAILED]: deleteIssueFailed,
+
+  [TYPES.EDIT_ISSUE_REQUEST]: editIssueRequest,
+  [TYPES.EDIT_ISSUE_SUCCESSED]: editIssueSuccessed,
+  [TYPES.EDIT_ISSUE_FAILED]: editIssueFailed,
 
   [TYPES.FETCH_ISSUES_REQUEST]: fetchIssuesRequest,
   [TYPES.FETCH_ISSUES_SUCCESSED]: fetchIssuesSuccessed,

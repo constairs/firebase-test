@@ -43,13 +43,13 @@ export const getIssueFailed = error => ({
   type: TYPES.GET_ISSUE_FAILED,
   payload: error
 });
-export const editIssueRequest = issueId => ({
+export const editIssueRequest = issueData => ({
   type: TYPES.EDIT_ISSUE_REQUEST,
-  payload: issueId
+  payload: issueData
 });
-export const editIssueSuccessed = createIssueResponse => ({
+export const editIssueSuccessed = updatedIssue => ({
   type: TYPES.EDIT_ISSUE_SUCCESSED,
-  payload: createIssueResponse
+  payload: updatedIssue
 });
 export const editIssueFailed = error => ({
   type: TYPES.EDIT_ISSUE_FAILED,

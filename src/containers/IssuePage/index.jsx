@@ -3,14 +3,15 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import styled from 'styled-components';
-import moment from 'moment';
-// import { history } from '../../redux/store';
+import { Switch, Route } from 'react-router-dom';
+import { history } from '../../redux/store';
 
 import { fetchIssuesRequest, deleteIssueRequest, editIssueRequest } from '../../redux/issues/actions';
 
 import { Spinner } from '../../components/UI/Spinner';
-import { Button } from '../../components/UI/Button';
+import { IssueForm } from '../../components/IssueForm';
 import { StyledIssuePage } from './index.styles';
+import { IssueItem } from '../../components/IssueItem';
 
 const Preloader = styled.div`
   display: flex;
@@ -29,7 +30,7 @@ class Issue extends React.Component {
   }
 
   handleClickEdit = () => {
-    // history.push(`${location.pathname}/${this.props.issues.currentIssue.issueId}/edit`);
+    history.push(`${location.pathname}edit`);
   }
 
   render() {
@@ -47,17 +48,16 @@ class Issue extends React.Component {
                 (<Preloader><Spinner /></Preloader>)
                 :
                 (
-                  <div>
-                    <p>{moment(currentIssue.createdAt).locale('ru').format('LLL')}</p>
-                    <h1>{currentIssue.title}</h1>
-                    <p>{currentIssue.description}</p>
-                    <Button onClick={this.handleClickEdit}>Редактировать</Button>
-                  </div>
+                  <IssueItem issue={currentIssue} onEdit={this.handleClickEdit} />
                 )
               }
             </div>
           ) : null
         }
+        <Switch>
+          {/* <Route component={IssueItem} path="/issue/:id" /> */}
+          <Route render={props => <IssueForm issue={props.issues.currentIssue} />} exact path="/issues/issue/edit" />
+        </Switch>
       </StyledIssuePage>
     );
   }

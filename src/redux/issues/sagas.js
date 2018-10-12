@@ -1,10 +1,17 @@
 import { takeLatest, call, put } from 'redux-saga/effects';
 import { push } from 'connected-react-router';
-import { CREATE_ISSUE_REQUEST, DELETE_ISSUE_REQUEST, EDIT_ISSUE_REQUEST, FETCH_ISSUES_REQUEST, GET_ISSUE_REQUEST } from './types';
+import {
+  CREATE_ISSUE_REQUEST,
+  DELETE_ISSUE_REQUEST,
+  EDIT_ISSUE_REQUEST,
+  FETCH_ISSUES_REQUEST,
+  GET_ISSUE_REQUEST
+} from './types';
 
 import {
   createIssueData,
   deleteIssueData,
+  editIssueData,
   fetchIssues,
   getIssue,
 } from '../../firebase/database';
@@ -16,6 +23,8 @@ import {
   fetchIssuesFailed,
   deleteIssueSuccessed,
   deleteIssueFailed,
+  editIssueSuccessed,
+  editIssueFailed,
   getIssueSuccessed,
   getIssueFailed,
 } from './actions';
@@ -41,10 +50,11 @@ export function* deleteIssueSaga(action) {
 
 export function* editIssueSaga(action) {
   try {
-    const deleteResponse = yield call(deleteIssueData, action.payload);
-    yield put(deleteIssueSuccessed(deleteResponse));
+    const updatedIssue = yield call(editIssueData, ...action.payload);
+    yield put(editIssueSuccessed(updatedIssue));
+    yield put(push('/issues'));
   } catch (error) {
-    put(deleteIssueFailed(error.message));
+    put(editIssueFailed(error.message));
   }
 }
 
@@ -61,7 +71,7 @@ export function* getIssueSaga(action) {
   try {
     const issue = yield call(getIssue, action.payload);
     yield put(getIssueSuccessed(issue));
-    // yield put(push(`/issue/${issue.issueId}`));
+    yield put(push('/issues/issue/'));
   } catch (error) {
     yield put(getIssueFailed(error.message));
   }

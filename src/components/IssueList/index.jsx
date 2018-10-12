@@ -21,7 +21,7 @@ export class IssueList extends React.Component {
         {
           issues.map(issue =>
             (<IssueListItem
-              key={issue.createdAt}
+              key={issue.issueId}
               item={issue}
               onClickItem={this.handleClickIssue}
               onDelete={this.handleDeleteIssue}

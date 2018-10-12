@@ -20,7 +20,7 @@ export class IssueListItem extends React.Component {
     return (
       <StyledIssueItem onClick={this.handleClickItem}>
         <Panel>
-          <p>{moment(createdAt).locale('ru').format('LLL')}</p>
+          <p>{moment(createdAt).locale('ru').format('LLL')}{this.props.item.updatedAt ? ` (Обновлено: ${moment(this.props.item.updatedAt).locale('ru').format('LLL')})` : null}</p>
           <h1>{title}</h1>
           <p>{description}</p>
           <Button onClick={this.handleClickDelete}>Удалить</Button>
