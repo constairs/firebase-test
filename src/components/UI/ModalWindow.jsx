@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { CloseBtn } from './CloseBtn';
 import { Form } from './Form';
+import { colors } from '../../theme/theme';
 
 export const ModalWindow = styled.div`
   display: block;
@@ -9,11 +9,12 @@ export const ModalWindow = styled.div`
   box-shadow: 0 0 10px rgba(0,0,0,.3);
   padding: 40px 30px;
   position: relative;
-  ${CloseBtn} {
+  background-color: ${colors.light};
+  > button {
     position: absolute;
     top: 5px;
     right: 5px;
-  };
+  }
   ${Form} {
     max-height: 400px;
   }

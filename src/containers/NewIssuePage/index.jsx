@@ -2,8 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
-import { history } from '../../redux/store';
-
 
 import { createIssueRequest } from '../../redux/issues/actions';
 
@@ -16,15 +14,14 @@ class NewIssue extends React.Component {
     this.props.createIssueRequest(createIssueData);
   }
 
-  addNesIssue = () => {
-    history.push('/issues/new');
+  handleUploadFile = () => {
   }
 
   render() {
     return (
       <Page>
         <h1>Create Issue</h1>
-        <IssueForm onEditIssue={this.handleEditIssue} onCreateIssue={this.handleCreateIssue} />
+        <IssueForm onUploadFile={this.handleUploadFile} onCreateIssue={this.handleCreateIssue} />
       </Page>
     );
   }

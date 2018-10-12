@@ -32,7 +32,7 @@ class NotificationWindow extends React.Component {
     const { showNotification } = this.state;
     return (
       <Notification show={showNotification}>
-        <CloseBtn onClick={this.closeButton} />
+        <CloseBtn onClickBtn={this.closeButton} />
         <p>{error || success}</p>
       </Notification>
     );

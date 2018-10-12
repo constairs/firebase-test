@@ -28,7 +28,7 @@ export class Modal extends React.Component {
     return (
       <ModalWrapper show={show}>
         <ModalWindow>
-          <CloseBtn onClick={this.handleCloseModal} />
+          <CloseBtn onClickBtn={this.handleCloseModal} />
           <Component {...this.props} />
         </ModalWindow>
       </ModalWrapper>

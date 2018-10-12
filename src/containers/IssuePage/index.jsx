@@ -30,7 +30,7 @@ class Issue extends React.Component {
   }
 
   handleClickEdit = () => {
-    history.push(`${location.pathname}edit`);
+    history.push('/issues/issue/edit');
   }
 
   render() {

@@ -1,8 +1,6 @@
 import styled from 'styled-components';
 import { colors } from '../../theme/theme';
 
-import { CloseBtn } from './CloseBtn';
-
 export const Notification = styled.div`
   width: 300px;
   padding: 5px 15px;
@@ -14,7 +12,7 @@ export const Notification = styled.div`
   right: 20px;
   transition: opacity .1s;
   ${props => (props.show ? 'transform: translateY(0px); opacity: 1;' : 'transform: translateY(20px); opacity: 0;')}
-  ${CloseBtn} {
+  >button {
     position: absolute;
     top: 5px;
     right: 5px;
