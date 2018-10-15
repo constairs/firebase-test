@@ -5,7 +5,8 @@ import {
   DELETE_ISSUE_REQUEST,
   EDIT_ISSUE_REQUEST,
   FETCH_ISSUES_REQUEST,
-  GET_ISSUE_REQUEST
+  GET_ISSUE_REQUEST,
+  DOWNLOAD_ATTACHMENT_REQUEST
 } from './types';
 
 import {
@@ -16,7 +17,7 @@ import {
   getIssue,
 } from '../../firebase/database';
 
-import { uploadFiles } from '../../firebase/storage';
+import { uploadFiles, downloadFiles } from '../../firebase/storage';
 
 import {
   createIssueSuccessed,
@@ -29,16 +30,19 @@ import {
   editIssueFailed,
   getIssueSuccessed,
   getIssueFailed,
+  downloadAttachmentSuccessed,
+  downloadAttachmentFailed
 } from './actions';
 
 export function* createIssueSaga(action) {
   try {
     if (action.payload.issueFiles.length > 0) {
-      const issueWithFile = [
+      const issueWithFiles = [
         ...action.payload.issueData,
         yield call(uploadFiles, action.payload.issueFiles),
       ];
-      const createResponse = yield call(createIssueData, ...issueWithFile);
+      console.log(issueWithFiles);
+      const createResponse = yield call(createIssueData, ...issueWithFiles);
       yield put(createIssueSuccessed(createResponse));
       yield put(push('/issues'));
     } else {
@@ -90,10 +94,20 @@ export function* getIssueSaga(action) {
   }
 }
 
+export function* downloadAttachmentSaga(action) {
+  try {
+    const dowloadResponse = yield call(downloadFiles, action.payload);
+    yield put(downloadAttachmentSuccessed(dowloadResponse));
+  } catch (error) {
+    yield put(downloadAttachmentFailed(error.message));
+  }
+}
+
 export function* issuesSagas() {
   yield takeLatest(CREATE_ISSUE_REQUEST, createIssueSaga);
   yield takeLatest(DELETE_ISSUE_REQUEST, deleteIssueSaga);
   yield takeLatest(GET_ISSUE_REQUEST, getIssueSaga);
   yield takeLatest(EDIT_ISSUE_REQUEST, editIssueSaga);
   yield takeLatest(FETCH_ISSUES_REQUEST, fetchIssuesSaga);
+  yield takeLatest(DOWNLOAD_ATTACHMENT_REQUEST, downloadAttachmentSaga);
 }

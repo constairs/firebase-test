@@ -68,6 +68,21 @@ export const fetchIssuesFailed = error => ({
   payload: error
 });
 
+export const downloadAttachmentRequest = url => ({
+  type: TYPES.DOWNLOAD_ATTACHMENT_REQUEST,
+  payload: url
+});
+
+export const downloadAttachmentSuccessed = response => ({
+  type: TYPES.DOWNLOAD_ATTACHMENT_SUCCESSED,
+  payload: response
+});
+
+export const downloadAttachmentFailed = error => ({
+  type: TYPES.DOWNLOAD_ATTACHMENT_FAILED,
+  payload: error
+});
+
 export const closeNotification = () => ({
   type: TYPES.ISSUES_CLOSE_NOTIFICATION
 });

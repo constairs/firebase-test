@@ -102,6 +102,17 @@ const issuesCloseNotification = () => pipe(
   assocPath(['notification', 'success'], ''),
 );
 
+const downloadAttachmentRequest = () => assoc('issueFetching', true);
+const downloadAttachmentSuccessed = issue => pipe(
+  assoc('issueFetching', false),
+  assoc('currentIssue', issue)
+);
+const downloadAttachmentFailed = error => pipe(
+  assoc('issuesFetching', false),
+  assocPath(['notification', 'show'], true),
+  assocPath(['notification', 'error'], error),
+);
+
 const handlers = {
   [TYPES.CREATE_ISSUE_REQUEST]: createIssueRequest,
   [TYPES.CREATE_ISSUE_SUCCESSED]: createIssueSuccessed,
@@ -122,6 +133,10 @@ const handlers = {
   [TYPES.GET_ISSUE_REQUEST]: getIssueRequest,
   [TYPES.GET_ISSUE_SUCCESSED]: getIssueSuccessed,
   [TYPES.GET_ISSUE_FAILED]: getIssueFailed,
+
+  [TYPES.DOWNLOAD_ATTACHMENT_REQUEST]: downloadAttachmentRequest,
+  [TYPES.DOWNLOAD_ATTACHMENT_SUCCESSED]: downloadAttachmentSuccessed,
+  [TYPES.DOWNLOAD_ATTACHMENT_FAILED]: downloadAttachmentFailed,
 
   [TYPES.ISSUES_CLOSE_NOTIFICATION]: issuesCloseNotification,
 };

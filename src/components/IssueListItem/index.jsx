@@ -5,7 +5,6 @@ import moment from 'moment';
 import { Panel } from '../UI/Panel';
 import { Button } from '../UI/Button';
 import { StyledIssueItem } from './index.styles';
-
 import { ALink } from '../UI/ALink';
 
 export class IssueListItem extends React.Component {
@@ -19,7 +18,7 @@ export class IssueListItem extends React.Component {
 
   render() {
     const {
-      issueId, title, description, createdAt, attachedFiles
+      title, description, createdAt, attachedFiles
     } = this.props.item;
     return (
       <StyledIssueItem onClick={this.handleClickItem}>
@@ -30,7 +29,9 @@ export class IssueListItem extends React.Component {
           {attachedFiles ? (
             <ul>
               {
-                attachedFiles.map(file => (<li key={issueId}><ALink>{file}</ALink></li>))
+                attachedFiles.map(file =>
+                  (<li key={file}><ALink>{file}</ALink></li>)
+                )
               }
             </ul>
           )

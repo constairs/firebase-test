@@ -6,7 +6,12 @@ import styled from 'styled-components';
 import { Switch, Route } from 'react-router-dom';
 import { history } from '../../redux/store';
 
-import { fetchIssuesRequest, deleteIssueRequest, editIssueRequest } from '../../redux/issues/actions';
+import {
+  fetchIssuesRequest,
+  deleteIssueRequest,
+  editIssueRequest,
+  downloadAttachmentRequest
+} from '../../redux/issues/actions';
 
 import { Spinner } from '../../components/UI/Spinner';
 import { IssueForm } from '../../components/IssueForm';
@@ -33,6 +38,10 @@ class Issue extends React.Component {
     history.push('/issues/issue/edit');
   }
 
+  handleAttachmentDownload = (url) => {
+    this.props.downloadAttachmentRequest(url);
+  }
+
   render() {
     const {
       currentIssue,
@@ -48,7 +57,11 @@ class Issue extends React.Component {
                 (<Preloader><Spinner /></Preloader>)
                 :
                 (
-                  <IssueItem issue={currentIssue} onEdit={this.handleClickEdit} />
+                  <IssueItem
+                    issue={currentIssue}
+                    onEdit={this.handleClickEdit}
+                    onAttachmentDownload={this.handleAttachmentDownload}
+                  />
                 )
               }
             </div>
@@ -71,6 +84,7 @@ export const IssuePage = connect(
     fetchIssuesRequest: bindActionCreators(fetchIssuesRequest, dispatch),
     deleteIssueRequest: bindActionCreators(deleteIssueRequest, dispatch),
     editIssueRequest: bindActionCreators(editIssueRequest, dispatch),
+    downloadAttachmentRequest: bindActionCreators(downloadAttachmentRequest, dispatch),
   })
 )(Issue);
 
@@ -78,5 +92,6 @@ export const IssuePage = connect(
 Issue.propTypes = {
   fetchIssuesRequest: PropTypes.func.isRequired,
   deleteIssueRequest: PropTypes.func.isRequired,
+  downloadAttachmentRequest: PropTypes.func.isRequired,
   issues: PropTypes.objectOf(PropTypes.any).isRequired,
 };

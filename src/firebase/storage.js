@@ -5,22 +5,24 @@ import 'firebase/firestore';
 
 /* eslint-disable */
   import { app } from './index';
-import { resolve } from 'path';
 /* eslint-disable */
 
 const storage = firebase.storage(app);
 
-const storageRef = firebase.storage(app).ref();
+const storageRef = storage.ref();
 
 export function uploadFiles(files) {
   function uploadFile(file) {
+
     const metadata = {
       contentType: file.type,
       size: file.size,
       name: file.name,
     };
+
+    const fileRef = storageRef.child('issuesFiles/' + file.name);
   
-    const uploadTask = storageRef.child('issuesFiles/' + file.name).put(file, metadata);
+    const uploadTask = fileRef.put(file, metadata);
   
     uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
       (snapshot) => {
@@ -47,21 +49,59 @@ export function uploadFiles(files) {
       }
     }, () => {
       uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+        console.log(downloadURL);
       });
     });
 
-    return uploadTask.snapshot.ref.getDownloadURL();
+    return file.name;
+    // return uploadTask.snapshot.ref.getDownloadURL();
   }
 
   return Promise.all(
     files.map(file => uploadFile(file))
   )
   .then((urls) => {
-    console.log(`Some successed: `, urls);
     return (urls);
   })
   .catch((error) => {
-    console.log(`Some failed: `, error.message)
+    console.log(`Some failed: `, error.message);
+  });
+
+}
+
+export function downloadFiles(filename) {
+
+  return new Promise((resolve, reject) => {
+
+    const fileRef = storageRef.child('issuesFiles/' + filename);
+
+    console.log(fileRef);
+
+    fileRef.getDownloadURL().then((url) => {
+  
+      var xhr = new XMLHttpRequest();
+      xhr.responseType = 'blob';
+
+      xhr.onload = function(event) {
+        if(xhr.status !== 200) {
+          reject(xhr.statusText);
+        }
+
+        if(xhr.readyState === 4 && xhr.status === 200) {
+          console.log(xhr.response);
+          resolve(xhr.response);
+        }
+      };
+
+      xhr.onerror = () => reject(Error("There was a network error."));
+
+      xhr.open('GET', url);
+      xhr.send();
+
+    }).catch(function(error) {
+      reject(error);
+    });
+  
   });
 
 }
