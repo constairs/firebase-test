@@ -14,8 +14,7 @@ import { Input } from '../../components/UI/Input';
 export class FileUploadForm extends React.Component {
   state = {
     fileMessageText: '',
-    uploadedFile: [],
-    fileToUpload: '',
+    uploadedFiles: [],
     errorUpload: ''
   };
 
@@ -24,33 +23,12 @@ export class FileUploadForm extends React.Component {
     this.setState({ [name]: value });
   };
 
-  handleFileForm = (e) => {
-    e.preventDefault();
-    const fileData = [
-      ...this.state.uploadedFile,
-    ];
-    this.props.onFileSend(fileData);
-    this.setState({
-      uploadedFile: [],
-      fileUploadModal: false,
-      fileToUpload: '',
-      fileMessageText: '',
-    });
-  };
-
-  fileUploadModal = () => {
-    this.setState({ fileUploadModal: !this.state.fileUploadModal });
-  };
-
   handleDropFile = (acceptedFiles) => {
     acceptedFiles.forEach((file) => {
       const reader = new FileReader();
       reader.onload = () => {
         this.setState({
-          fileToUpload: file,
-        });
-        this.setState({
-          uploadedFile: [file, file.name, file.type, file.size],
+          uploadedFiles: [...this.state.uploadedFiles, file],
         });
       };
       reader.onerror = () => {
@@ -62,35 +40,47 @@ export class FileUploadForm extends React.Component {
     });
   };
 
+  handleFileForm = (e) => {
+    e.preventDefault();
+    this.props.onFileSend(this.state.uploadedFiles);
+    this.setState({
+      uploadedFiles: [],
+      fileMessageText: '',
+    });
+  };
+
   handleClearFile = () => {
     this.setState({
-      uploadedFile: [],
-      fileToUpload: '',
+      uploadedFiles: [],
       fileMessageText: '',
     });
   }
 
   render() {
     const {
-      fileToUpload,
+      uploadedFiles,
       fileMessageText,
       errorUpload
     } = this.state;
     return (
       <StyledForm onSubmit={this.handleFileForm}>
         <StyledDropzone onDrop={this.handleDropFile} />
-        {fileToUpload ? (
+        {uploadedFiles.length > 0 ? (
           <div>
-            <p>Файл для отправки</p>
-            <div>
-              <Button onClick={this.handleClearFile}>
-                <MdClose />
-              </Button>
-              <FilePreviewItem>
-                <MdInsertDriveFile />
-              </FilePreviewItem>
-              <p>{fileToUpload.size} кб</p>
-            </div>
+            <p>Файлы для отправки</p>
+            {
+              uploadedFiles.map(file => (
+                <div key={file.lastModified}>
+                  <Button onClick={this.handleClearFile}>
+                    <MdClose />
+                  </Button>
+                  <FilePreviewItem>
+                    <MdInsertDriveFile />
+                  </FilePreviewItem>
+                  <p>{file.size} кб</p>
+                </div>
+              ))
+            }
           </div>
       ) : null}
         {errorUpload || null}
@@ -100,7 +90,7 @@ export class FileUploadForm extends React.Component {
           name="fileMessageText"
           value={fileMessageText}
           onChange={this.handleTextInput}
-          disabled={!fileToUpload}
+          disabled={!uploadedFiles}
         />
         <Button type="submit">Отправить</Button>
       </StyledForm>

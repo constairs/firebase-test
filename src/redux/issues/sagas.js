@@ -16,6 +16,8 @@ import {
   getIssue,
 } from '../../firebase/database';
 
+import { uploadFiles } from '../../firebase/storage';
+
 import {
   createIssueSuccessed,
   createIssueFailed,
@@ -31,9 +33,19 @@ import {
 
 export function* createIssueSaga(action) {
   try {
-    const createResponse = yield call(createIssueData, ...action.payload);
-    yield put(createIssueSuccessed(createResponse));
-    yield put(push('/issues'));
+    if (action.payload.issueFiles.length > 0) {
+      const issueWithFile = [
+        ...action.payload.issueData,
+        yield call(uploadFiles, action.payload.issueFiles),
+      ];
+      const createResponse = yield call(createIssueData, ...issueWithFile);
+      yield put(createIssueSuccessed(createResponse));
+      yield put(push('/issues'));
+    } else {
+      const createResponse = yield call(createIssueData, ...action.payload.issueData);
+      yield put(createIssueSuccessed(createResponse));
+      yield put(push('/issues'));
+    }
   } catch (error) {
     put(createIssueFailed(error.message));
   }
@@ -43,6 +55,7 @@ export function* deleteIssueSaga(action) {
   try {
     const deleteResponse = yield call(deleteIssueData, action.payload);
     yield put(deleteIssueSuccessed(deleteResponse));
+    yield put(push('/issues'));
   } catch (error) {
     put(deleteIssueFailed(error.message));
   }

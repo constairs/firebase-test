@@ -8,14 +8,17 @@ import 'firebase/database';
 
 const database = firebase.database();
 
-export function createIssueData(issueId, createdAt, issueTitle, issueDescription) {
+export function createIssueData(issueId, createdAt, issueTitle, issueDescription, createdDate, attachedFiles) {
 
   const issueData = {
     issueId: issueId,
     title: issueTitle,
     createdAt: createdAt,
-    description: issueDescription
+    description: issueDescription,
+    attachedFiles: attachedFiles
   };
+
+  console.log(issueData);
 
   return new Promise((resolve, reject) => {
     firebase.database().ref('issues/' + issueId).set(issueData)

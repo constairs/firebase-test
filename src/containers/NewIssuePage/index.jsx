@@ -14,14 +14,11 @@ class NewIssue extends React.Component {
     this.props.createIssueRequest(createIssueData);
   }
 
-  handleUploadFile = () => {
-  }
-
   render() {
     return (
       <Page>
         <h1>Create Issue</h1>
-        <IssueForm onUploadFile={this.handleUploadFile} onCreateIssue={this.handleCreateIssue} />
+        <IssueForm onCreateIssue={this.handleCreateIssue} />
       </Page>
     );
   }

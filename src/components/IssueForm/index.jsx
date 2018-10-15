@@ -17,6 +17,7 @@ export class IssueForm extends React.Component {
     this.state = {
       issueTitle: props.issue.title || '',
       issueDescription: props.issue.description || '',
+      issueFiles: [],
       showUploadFileForm: false,
     };
   }
@@ -32,8 +33,10 @@ export class IssueForm extends React.Component {
     });
   }
 
-  handleFileSend = (fileData) => {
-    this.props.onUploadFile(fileData);
+  handleFileSend = (files) => {
+    this.setState({
+      issueFiles: files,
+    });
   }
 
   handleSubmit = (e) => {
@@ -45,20 +48,24 @@ export class IssueForm extends React.Component {
       this.state.issueDescription,
       this.props.issue.createdAt ? Date.now() : null,
     ];
+    const { issueFiles } = this.state;
 
     if (this.props.issue.issueId) {
-      this.props.onEditIssue(issueData);
+      this.props.onEditIssue({ issueData, issueFiles });
     } else {
-      this.props.onCreateIssue(issueData);
+      this.props.onCreateIssue({ issueData, issueFiles });
       this.setState({
         issueTitle: '',
-        issueDescription: ''
+        issueDescription: '',
+        issueFiles: []
       });
     }
   }
 
   render() {
-    const { issueTitle, issueDescription, showUploadFileForm } = this.state;
+    const {
+      issueTitle, issueDescription, issueFiles, showUploadFileForm
+    } = this.state;
     return (
       <div>
         <StyledIssueForm onSubmit={this.handleSubmit}>
@@ -71,6 +78,7 @@ export class IssueForm extends React.Component {
             <Textarea id="description" name="issueDescription" onChange={this.handleChangeInput} value={issueDescription} />
           </Label>
           <SmButton type="button" onClick={this.handleOpenFileModal}><MdAttachFile /></SmButton>
+          {issueFiles.length > 0 ? `Прикреплено файлов: ${issueFiles.length}` : null}
           <Button>{this.props.issue.issueId ? 'Edit' : 'Create'}</Button>
         </StyledIssueForm>
         <Modal
@@ -90,12 +98,10 @@ IssueForm.defaultProps = {
   },
   onEditIssue: null,
   onCreateIssue: null,
-  onUploadFile: null,
 };
 
 IssueForm.propTypes = {
   onCreateIssue: PropTypes.func,
-  onUploadFile: PropTypes.func,
   onEditIssue: PropTypes.func,
   issue: PropTypes.objectOf(PropTypes.any)
 };
