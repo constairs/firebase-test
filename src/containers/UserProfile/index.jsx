@@ -6,8 +6,8 @@ import { userLogoutRequest, userUpdateRequest } from '../../redux/user/actions';
 
 import { RoundImg } from '../../components/UI/RoundImg';
 import { ImgContainer } from '../../components/UI/ImgContainer';
-import { StyledProfile } from './index.styles';
-import { Button } from '../../components/UI/Button';
+import { StyledProfile, ImgBtn } from './index.styles';
+import { SmButton } from '../../components/UI/SmButton';
 import { Modal } from '../../components/Modal';
 import { UpdateUserForm } from '../../components/UpdateUserForm';
 
@@ -27,9 +27,9 @@ class Profile extends React.Component {
     });
   }
 
-  handleShowModal = () => {
+  handleModal = () => {
     this.setState({
-      showModal: true
+      showModal: !this.state.showModal
     });
   }
 
@@ -43,7 +43,7 @@ class Profile extends React.Component {
     return (
       <StyledProfile>
         <ImgContainer>
-          <Button onClick={this.handleShowModal}>Change</Button>
+          <ImgBtn onClick={this.handleModal}>Change</ImgBtn>
           <RoundImg
             src={photoURL || 'https://firebase.google.com/_static/images/firebase/touchicon-180.png'}
             alt={displayName || 'Profile'}
@@ -56,11 +56,16 @@ class Profile extends React.Component {
           <p>{email}</p>
           {
           email ?
-            <button type="button" onClick={this.handleLogout}>Logout</button>
+            <SmButton type="button" onClick={this.handleLogout}>Logout</SmButton>
           : null
           }
         </div>
-        <Modal component={UpdateUserForm} show={showModal} onUpdateUser={this.handleUpdate} />
+        <Modal
+          component={UpdateUserForm}
+          show={showModal}
+          onUpdateUser={this.handleUpdate}
+          onCloseModal={this.handleModal}
+        />
       </StyledProfile>
     );
   }

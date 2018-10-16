@@ -19,9 +19,8 @@ export class Modal extends React.Component {
     };
   }
 
-
   handleCloseModal = () => {
-    this.setState({ show: false });
+    this.props.onCloseModal();
   }
 
   render() {
@@ -41,4 +40,5 @@ export class Modal extends React.Component {
 Modal.propTypes = {
   component: PropTypes.func.isRequired,
   show: PropTypes.bool.isRequired,
+  onCloseModal: PropTypes.func.isRequired,
 };

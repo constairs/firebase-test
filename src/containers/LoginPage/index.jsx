@@ -20,9 +20,9 @@ class Login extends React.Component {
   }
 
 
-  handleResetPasswordModal = () => {
+  handleModal = () => {
     this.setState({
-      showResetModal: true
+      showResetModal: !this.state.showResetModal
     });
   }
 
@@ -40,12 +40,13 @@ class Login extends React.Component {
         <UserNotification />
         <LoginForm
           onLoginUser={this.handleLoginUser}
-          onResetPassword={this.handleResetPasswordModal}
+          onResetPassword={this.handleModal}
         />
         <Modal
           component={ResetForm}
           show={showResetModal}
           onResetPassword={this.handleResetPassword}
+          onCloseModal={this.handleModal}
         />
       </StyledLoginPage>
     );

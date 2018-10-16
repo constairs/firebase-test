@@ -17,6 +17,7 @@ import { Page } from '../../components/UI/Page';
 import { Input } from '../../components/UI/Input';
 import { Button } from '../../components/UI/Button';
 import { Form } from '../../components/UI/Form';
+import { Div } from './index.styles';
 
 class Profile extends React.Component {
   state = {
@@ -80,7 +81,7 @@ class Profile extends React.Component {
         <UserNotification />
         <UserProfile />
         <div>
-          <p>
+          <Div>
             <Button name="showChangeEmail" onClick={this.handleChangeButton}>Изменить email</Button>
             { showChangeEmail ?
               <Form onSubmit={this.changeEmailRequest}>
@@ -88,8 +89,8 @@ class Profile extends React.Component {
                 <Button>Send</Button>
               </Form>
             : null }
-          </p>
-          <p>
+          </Div>
+          <Div>
             <Button name="showSendVerification" onClick={this.handleChangeButton}>Подтвердить email для входа</Button>
             { showSendVerification ?
               <Form onSubmit={this.sendVerificationRequest}>
@@ -97,8 +98,8 @@ class Profile extends React.Component {
                 <Button>Send</Button>
               </Form>
             : null }
-          </p>
-          <p>
+          </Div>
+          <Div>
             <Button name="showChangePassword" onClick={this.handleChangeButton}>Изменить пароль</Button>
             { showChangePassword ?
               <Form onSubmit={this.changePasswordRequest}>
@@ -106,10 +107,10 @@ class Profile extends React.Component {
                 <Button>Send</Button>
               </Form>
             : null }
-          </p>
-          <p>
+          </Div>
+          <div>
             <Button onClick={this.props.userDeleteRequest}>Удалить аккаунт</Button>
-          </p>
+          </div>
         </div>
       </Page>
     );

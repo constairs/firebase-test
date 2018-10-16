@@ -27,9 +27,9 @@ export class IssueForm extends React.Component {
     this.setState({ [name]: value, showUploadFileForm: false, });
   }
 
-  handleOpenFileModal = () => {
+  handleModal = () => {
     this.setState({
-      showUploadFileForm: true,
+      showUploadFileForm: !this.state.showUploadFileForm,
     });
   }
 
@@ -77,7 +77,7 @@ export class IssueForm extends React.Component {
             <span>Description</span>
             <Textarea id="description" name="issueDescription" onChange={this.handleChangeInput} value={issueDescription} />
           </Label>
-          <SmButton type="button" onClick={this.handleOpenFileModal}><MdAttachFile /></SmButton>
+          <SmButton type="button" onClick={this.handleModal}><MdAttachFile /></SmButton>
           {issueFiles.length > 0 ? `Прикреплено файлов: ${issueFiles.length}` : null}
           <Button type="submit" disabled={!issueTitle}>{this.props.issue.issueId ? 'Edit' : 'Create'}</Button>
         </StyledIssueForm>
@@ -86,6 +86,7 @@ export class IssueForm extends React.Component {
           show={showUploadFileForm}
           onFileSend={this.handleFileSend}
           attachedFiles={issueFiles}
+          onCloseModal={this.handleModal}
         />
       </div>
     );
