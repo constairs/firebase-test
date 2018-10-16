@@ -34,8 +34,6 @@ export function reAuth() {
     const user = firebase.auth().currentUser;
     let credential;
 
-    // Prompt the user to re-provide their sign-in credentials
-
     user.reauthenticateAndRetrieveDataWithCredential(credential).then(() => {
       resolve(user);
     }).catch((error) => {

@@ -1,27 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  MdInsertDriveFile,
-  MdClose
-} from 'react-icons/md';
 
 import { StyledForm } from './index.styles';
-import { FilePreviewItem } from '../UI/FilePreviewItem';
 import { StyledDropzone } from '../UI/StyledDropzone';
+import { FilesList } from '../UI/FilesList';
+import { FileItem } from '../FileItem';
 import { Button } from '../UI/Button';
-import { Input } from '../../components/UI/Input';
 
 export class FileUploadForm extends React.Component {
-  state = {
-    fileMessageText: '',
-    uploadedFiles: [],
-    errorUpload: ''
-  };
-
-  handleTextInput = ({ target }) => {
-    const { name, value } = target;
-    this.setState({ [name]: value });
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      uploadedFiles: props.attachedFiles || [],
+      errorUpload: ''
+    };
+  }
 
   handleDropFile = (acceptedFiles) => {
     acceptedFiles.forEach((file) => {
@@ -45,21 +38,18 @@ export class FileUploadForm extends React.Component {
     this.props.onFileSend(this.state.uploadedFiles);
     this.setState({
       uploadedFiles: [],
-      fileMessageText: '',
     });
   };
 
-  handleClearFile = () => {
+  handleRemoveFile = (del) => {
     this.setState({
-      uploadedFiles: [],
-      fileMessageText: '',
+      uploadedFiles: this.state.uploadedFiles.filter(item => item.lastModified !== del),
     });
   }
 
   render() {
     const {
       uploadedFiles,
-      fileMessageText,
       errorUpload
     } = this.state;
     return (
@@ -68,36 +58,34 @@ export class FileUploadForm extends React.Component {
         {uploadedFiles.length > 0 ? (
           <div>
             <p>Файлы для отправки</p>
-            {
+            <FilesList>
+              {
               uploadedFiles.map(file => (
-                <div key={file.lastModified}>
-                  <Button onClick={this.handleClearFile}>
-                    <MdClose />
-                  </Button>
-                  <FilePreviewItem>
-                    <MdInsertDriveFile />
-                  </FilePreviewItem>
-                  <p>{file.size} кб</p>
-                </div>
+                <FileItem
+                  key={file.lastModified}
+                  lastModified={file.lastModified}
+                  type={file.type}
+                  name={file.name}
+                  size={file.size}
+                  onClickRemove={this.handleRemoveFile}
+                />
               ))
             }
+            </FilesList>
           </div>
       ) : null}
         {errorUpload || null}
-        <Input
-          type="text"
-          placeholder="Сообщение"
-          name="fileMessageText"
-          value={fileMessageText}
-          onChange={this.handleTextInput}
-          disabled={!uploadedFiles}
-        />
         <Button type="submit">Отправить</Button>
       </StyledForm>
     );
   }
 }
 
+FileUploadForm.defaultProps = {
+  attachedFiles: [],
+};
+
 FileUploadForm.propTypes = {
   onFileSend: PropTypes.func.isRequired,
+  attachedFiles: PropTypes.arrayOf(PropTypes.any),
 };

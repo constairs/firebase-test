@@ -10,7 +10,6 @@ import {
   fetchIssuesRequest,
   deleteIssueRequest,
   editIssueRequest,
-  downloadAttachmentRequest
 } from '../../redux/issues/actions';
 
 import { Spinner } from '../../components/UI/Spinner';
@@ -36,10 +35,6 @@ class Issue extends React.Component {
 
   handleClickEdit = () => {
     history.push('/issues/issue/edit');
-  }
-
-  handleAttachmentDownload = (url) => {
-    this.props.downloadAttachmentRequest(url);
   }
 
   render() {
@@ -84,7 +79,6 @@ export const IssuePage = connect(
     fetchIssuesRequest: bindActionCreators(fetchIssuesRequest, dispatch),
     deleteIssueRequest: bindActionCreators(deleteIssueRequest, dispatch),
     editIssueRequest: bindActionCreators(editIssueRequest, dispatch),
-    downloadAttachmentRequest: bindActionCreators(downloadAttachmentRequest, dispatch),
   })
 )(Issue);
 
@@ -92,6 +86,5 @@ export const IssuePage = connect(
 Issue.propTypes = {
   fetchIssuesRequest: PropTypes.func.isRequired,
   deleteIssueRequest: PropTypes.func.isRequired,
-  downloadAttachmentRequest: PropTypes.func.isRequired,
   issues: PropTypes.objectOf(PropTypes.any).isRequired,
 };

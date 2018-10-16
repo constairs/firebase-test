@@ -73,9 +73,9 @@ export const downloadAttachmentRequest = url => ({
   payload: url
 });
 
-export const downloadAttachmentSuccessed = response => ({
+export const downloadAttachmentSuccessed = downloadRes => ({
   type: TYPES.DOWNLOAD_ATTACHMENT_SUCCESSED,
-  payload: response
+  payload: downloadRes
 });
 
 export const downloadAttachmentFailed = error => ({

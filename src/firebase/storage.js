@@ -1,7 +1,6 @@
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/storage';
-import 'firebase/firestore';
 
 /* eslint-disable */
   import { app } from './index';
@@ -53,8 +52,7 @@ export function uploadFiles(files) {
       });
     });
 
-    return file.name;
-    // return uploadTask.snapshot.ref.getDownloadURL();
+    return uploadTask.snapshot.ref.getDownloadURL();
   }
 
   return Promise.all(
@@ -70,15 +68,12 @@ export function uploadFiles(files) {
 }
 
 export function downloadFiles(filename) {
-
   return new Promise((resolve, reject) => {
 
     const fileRef = storageRef.child('issuesFiles/' + filename);
 
-    console.log(fileRef);
-
     fileRef.getDownloadURL().then((url) => {
-  
+
       var xhr = new XMLHttpRequest();
       xhr.responseType = 'blob';
 
@@ -98,10 +93,48 @@ export function downloadFiles(filename) {
       xhr.open('GET', url);
       xhr.send();
 
+
     }).catch(function(error) {
       reject(error);
     });
   
   });
+}
 
+export function deleteFile(filename) {
+  return new Promise((resolve, reject) => {
+    const fileRef = storageRef.child('issuesFiles/' + filename);
+
+    fileRef.delete().then(() => {
+      resolve('issuesFiles/' + filename);
+    }).catch((error) => {
+      reject(error);
+    });
+  });
+}
+
+export function getFileMetadata(filename) {
+  return new Promise((resolve, reject) => {
+    const fileRef = storageRef.child('issuesFiles/' + filename);
+
+    fileRef.getMetadata().then((metadata) => {
+      resolve(metadata);
+    }).catch((error) => {
+      reject(error);
+    });
+
+  });
+}
+
+
+export function updateMetadata(filename, newMetadata) {
+  return new Promise((resolve, reject) => {
+    const fileRef = storageRef.child('issuesFiles/' + filename);
+
+    fileRef.updateMetadata(newMetadata).then((metadata) => {
+      resolve(metadata);
+    }).catch((error) => {
+      reject(error);
+    });
+  });
 }

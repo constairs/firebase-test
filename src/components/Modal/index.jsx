@@ -11,12 +11,14 @@ export class Modal extends React.Component {
     }
     return null;
   }
+
   constructor(props) {
     super(props);
     this.state = {
       show: props.show,
     };
   }
+
 
   handleCloseModal = () => {
     this.setState({ show: false });

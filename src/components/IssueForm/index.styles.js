@@ -10,7 +10,7 @@ export const StyledIssueForm = styled(Form)`
 export const SmButton = styled(Button)`
   width: auto;
   margin-bottom: 16px;
-  background-color: ${colors.greyHover};
+  background-color: ${colors.accent};
   color: #000;
   border-radius: 100%;
   transition: all .2s ease-in-out;

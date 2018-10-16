@@ -12,4 +12,8 @@ export const Button = styled.button`
   padding: 10px 12px;
   letter-spacing: 1px;
   font-size: 14px;
+  :disabled {
+    background-color: ${colors.greyHover};
+    color: ${colors.dGrey};
+  }
 `;

@@ -18,11 +18,44 @@ export function createIssueData(issueId, createdAt, issueTitle, issueDescription
     attachedFiles: attachedFiles
   };
 
-  console.log(issueData);
-
   return new Promise((resolve, reject) => {
     firebase.database().ref('issues/' + issueId).set(issueData)
     .then(() => resolve(issueData))
+    .catch((error) => reject(error));
+  });
+}
+
+export function editIssueData(issueId, createdAt, issueTitle, issueDescription, updatedAt, attachedFiles = []) {
+
+  const updatedIssue = {
+    issueId: issueId,
+    title: issueTitle,
+    createdAt: createdAt,
+    updatedAt: updatedAt,
+    description: issueDescription,
+    attachedFiles: attachedFiles
+  };
+
+  console.log(updatedIssue);
+
+  return new Promise((resolve, reject) => {
+    firebase.database().ref('/issues/' + issueId).update(updatedIssue,
+    (error) => {
+      if (error) {
+        reject(error);
+      }
+      resolve(updatedIssue);
+    }
+      ).then(() => {resolve(updatedIssue)}).catch((error) => {reject(error)});
+  });
+}
+
+
+
+export function deleteIssueData(issueId) {
+  return new Promise((resolve, reject) => {
+    firebase.database().ref('/issues/' + issueId).remove()
+    .then(() => resolve(issueId))
     .catch((error) => reject(error));
   });
 }
@@ -44,33 +77,5 @@ export function getIssue(issueId) {
       resolve(snapshot.val());
     })
     .catch((error) => reject(error));
-  });
-}
-
-export function deleteIssueData(issueId) {
-  return new Promise((resolve, reject) => {
-    firebase.database().ref('/issues/' + issueId).remove()
-    .then(() => resolve(issueId))
-    .catch((error) => reject(error));
-  });
-}
-
-export function editIssueData(issueId, createdAt, issueTitle, issueDescription, updatedAt) {
-
-  const updateIssue = {
-    issueId: issueId,
-    title: issueTitle,
-    createdAt: createdAt,
-    updatedAt: updatedAt,
-    description: issueDescription
-  };
-
-  return new Promise((resolve, reject) => {
-    firebase.database().ref('/issues/' + issueId).update(updateIssue, (error) => {
-      if (error) {
-        reject(error);
-      }
-      resolve(updateIssue)
-    });
   });
 }

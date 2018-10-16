@@ -25,6 +25,7 @@ export class IssueList extends React.Component {
               item={issue}
               onClickItem={this.handleClickIssue}
               onDelete={this.handleDeleteIssue}
+              onAttachmentDownload={this.handleAttachmentDownload}
             />)
           )
         }

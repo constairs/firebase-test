@@ -17,14 +17,14 @@ export class IssueForm extends React.Component {
     this.state = {
       issueTitle: props.issue.title || '',
       issueDescription: props.issue.description || '',
-      issueFiles: [],
+      issueFiles: props.issue.attachedFiles || [],
       showUploadFileForm: false,
     };
   }
 
   handleChangeInput = ({ target }) => {
     const { name, value } = target;
-    this.setState({ [name]: value });
+    this.setState({ [name]: value, showUploadFileForm: false, });
   }
 
   handleOpenFileModal = () => {
@@ -79,12 +79,13 @@ export class IssueForm extends React.Component {
           </Label>
           <SmButton type="button" onClick={this.handleOpenFileModal}><MdAttachFile /></SmButton>
           {issueFiles.length > 0 ? `Прикреплено файлов: ${issueFiles.length}` : null}
-          <Button>{this.props.issue.issueId ? 'Edit' : 'Create'}</Button>
+          <Button type="submit" disabled={!issueTitle}>{this.props.issue.issueId ? 'Edit' : 'Create'}</Button>
         </StyledIssueForm>
         <Modal
           component={FileUploadForm}
           show={showUploadFileForm}
           onFileSend={this.handleFileSend}
+          attachedFiles={issueFiles}
         />
       </div>
     );

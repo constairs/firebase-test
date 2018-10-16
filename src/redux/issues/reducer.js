@@ -103,12 +103,12 @@ const issuesCloseNotification = () => pipe(
 );
 
 const downloadAttachmentRequest = () => assoc('issueFetching', true);
-const downloadAttachmentSuccessed = issue => pipe(
+const downloadAttachmentSuccessed = downloadRes => pipe(
   assoc('issueFetching', false),
-  assoc('currentIssue', issue)
+  assoc('file', downloadRes)
 );
 const downloadAttachmentFailed = error => pipe(
-  assoc('issuesFetching', false),
+  assoc('issueFetching', false),
   assocPath(['notification', 'show'], true),
   assocPath(['notification', 'error'], error),
 );

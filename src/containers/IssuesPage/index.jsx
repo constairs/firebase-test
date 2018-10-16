@@ -5,7 +5,12 @@ import { bindActionCreators } from 'redux';
 import styled from 'styled-components';
 import { history } from '../../redux/store';
 
-import { fetchIssuesRequest, deleteIssueRequest, editIssueRequest, getIssueRequest } from '../../redux/issues/actions';
+import {
+  fetchIssuesRequest,
+  deleteIssueRequest,
+  editIssueRequest,
+  getIssueRequest,
+} from '../../redux/issues/actions';
 
 import { Page } from '../../components/UI/Page';
 import { Spinner } from '../../components/UI/Spinner';
@@ -53,6 +58,7 @@ class Issues extends React.Component {
               onEditIssue={this.handleEdit}
               onDeleteIssue={this.handleDelete}
               onGetIssue={this.handleGetIssue}
+              onAttachmentDownload={this.handleAttachmentDownload}
             />
             <Button onClick={this.addNewIssue}>New issue</Button>
           </div>
