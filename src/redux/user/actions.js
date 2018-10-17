@@ -13,7 +13,6 @@ export const userCreateFailed = error => ({
   payload: error
 });
 
-
 export const userLoginRequest = loginUserData => ({
   type: TYPES.USER_LOGIN_REQUEST,
   payload: loginUserData

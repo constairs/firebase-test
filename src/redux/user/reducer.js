@@ -98,7 +98,6 @@ const userCloseNotification = () => pipe(
   assocPath(['notification', 'success'], ''),
 );
 
-
 const changeEmailRequest = () => assoc('userFetching', true);
 const changeEmailSuccessed = changeEmailResponse => pipe(
   assoc('userFetching', false),

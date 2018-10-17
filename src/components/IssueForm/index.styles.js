@@ -17,7 +17,9 @@ export const SmButton = styled(Button)`
   padding: 0;
   text-align: center;
   line-height: 34px;
-  vertical-align: middle;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 34px;
   height: 34px;
   :hover {

@@ -1,7 +1,7 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
 import moment from 'moment';
-import { MdInsertDriveFile } from 'react-icons/md';
+import { MdInsertDriveFile, MdAudiotrack } from 'react-icons/md';
 
 import { Panel } from '../UI/Panel';
 import { Button } from '../UI/Button';
@@ -37,9 +37,11 @@ export class IssueListItem extends React.Component {
                   <li key={file.name}>
                     <FilePreviewItem>
                       {
+                        /* eslint-disable */
                         RegExp('image', 'i').test(file.type) ?
                           <img src={file.downloadUrl} alt={file.name} />
-                        : <MdInsertDriveFile />
+                        : RegExp('audio', 'i').test(file.type) ? <MdAudiotrack /> : <MdInsertDriveFile />
+                        /* eslint-disable */
                       }
                     </FilePreviewItem>
                     <ALink

@@ -13,6 +13,51 @@ export const createIssueFailed = error => ({
   payload: error
 });
 
+export const uploadFilesRequest = uploadTask => ({
+  type: TYPES.UPLOAD_FILES_REQUEST,
+  payload: uploadTask,
+});
+
+export const uploadProgressChanged = progressData => ({
+  type: TYPES.UPLOAD_PROGRESS_CHANGED,
+  payload: progressData
+});
+
+export const uploadPaused = uploadTask => ({
+  type: TYPES.UPLOAD_PAUSED,
+  payload: uploadTask
+});
+export const uploadPausedSuccessed = () => ({
+  type: TYPES.UPLOAD_PAUSED_SUCCESSED,
+});
+export const uploadPausedFailed = error => ({
+  type: TYPES.UPLOAD_PAUSED_FAILED,
+  payload: error,
+});
+
+export const uploadRunning = () => ({
+  type: TYPES.UPLOAD_RESUME,
+});
+export const uploadRunningSuccessed = () => ({
+  type: TYPES.UPLOAD_RESUME_SUCCESSED,
+});
+export const uploadRunningFailed = error => ({
+  type: TYPES.UPLOAD_RESUME_FAILED,
+  payload: error,
+});
+
+export const uploadCancel = uploadTask => ({
+  type: TYPES.UPLOAD_CANCEL,
+  payload: uploadTask,
+});
+export const uploadCancelSuccessed = () => ({
+  type: TYPES.UPLOAD_CANCEL_SUCCESSED,
+});
+export const uploadCancelFailed = error => ({
+  type: TYPES.UPLOAD_CANCEL_FAILED,
+  payload: error,
+});
+
 export const deleteIssueRequest = issueId => ({
   type: TYPES.DELETE_ISSUE_REQUEST,
   payload: issueId

@@ -10,8 +10,14 @@ import {
   filter,
   map,
   when,
+  ifElse,
   path,
-  equals
+  equals,
+  has,
+  isEmpty,
+  findIndex,
+  view,
+  prop
 } from 'ramda';
 
 import { createReducer } from '../../utils/reducerUtils';
@@ -26,10 +32,15 @@ export const initState = {
     success: '',
     show: false
   },
-  issueFetching: false
+  issueFetching: false,
+  uploadingFiles: []
 };
 
 const issuesLens = lensProp('issues');
+
+const filesLens = lensProp('uploadingFiles');
+
+const files = prop('uploadingFiles');
 
 const createIssueRequest = () => assoc('issueFetching', true);
 const createIssueSuccessed = createResponse => pipe(
@@ -93,14 +104,23 @@ const getIssueSuccessed = issue => pipe(
 const getIssueFailed = error => pipe(
   assoc('issuesFetching', false),
   assocPath(['notification', 'show'], true),
-  assocPath(['notification', 'error'], error),
+  assocPath(['notification', 'error'], error)
 );
 
-const issuesCloseNotification = () => pipe(
-  assocPath(['notification', 'show'], false),
-  assocPath(['notification', 'error'], ''),
-  assocPath(['notification', 'success'], ''),
+const uploadFilesRequest = uploadTask => assoc('uploadingFiles', uploadTask);
+
+const uploadProgressChanged = progressData => ifElse(
+  isEmpty(files),
+  over(filesLens, append(progressData)),
+  when(
+    findIndex(has(`${progressData.name}`, view(filesLens))),
+    over(filesLens, map(file => (file.name === `${progressData.name}` ? progressData : file))),
+  ),
+  // findIndex(has(`${progressData.name}`, view(filesLens))),
+  // over(filesLens, map(file => (file.name === `${progressData.name}` ? progressData : file))),
+  // over(filesLens, append(progressData)),
 );
+
 
 const downloadAttachmentRequest = () => assoc('issueFetching', true);
 const downloadAttachmentSuccessed = downloadRes => pipe(
@@ -111,6 +131,12 @@ const downloadAttachmentFailed = error => pipe(
   assoc('issueFetching', false),
   assocPath(['notification', 'show'], true),
   assocPath(['notification', 'error'], error),
+);
+
+const issuesCloseNotification = () => pipe(
+  assocPath(['notification', 'show'], false),
+  assocPath(['notification', 'error'], ''),
+  assocPath(['notification', 'success'], ''),
 );
 
 const handlers = {
@@ -133,6 +159,10 @@ const handlers = {
   [TYPES.GET_ISSUE_REQUEST]: getIssueRequest,
   [TYPES.GET_ISSUE_SUCCESSED]: getIssueSuccessed,
   [TYPES.GET_ISSUE_FAILED]: getIssueFailed,
+
+  [TYPES.UPLOAD_FILES_REQUEST]: uploadFilesRequest,
+
+  [TYPES.UPLOAD_PROGRESS_CHANGED]: uploadProgressChanged,
 
   [TYPES.DOWNLOAD_ATTACHMENT_REQUEST]: downloadAttachmentRequest,
   [TYPES.DOWNLOAD_ATTACHMENT_SUCCESSED]: downloadAttachmentSuccessed,

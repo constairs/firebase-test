@@ -1,6 +1,7 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
-import { MdAttachFile } from 'react-icons/md';
+import { MdAttachFile, MdAudiotrack, MdInsertDriveFile } from 'react-icons/md';
+import Select from 'react-select';
 
 import { Input } from '../UI/Input';
 import { StyledIssueForm, SmButton } from './index.styles';
@@ -10,6 +11,8 @@ import { Button } from '../UI/Button';
 import { Modal } from '../Modal';
 import { FileUploadForm } from '../FileUploadForm';
 
+import { FilesList } from '../UI/FilesList';
+import { FilePreviewItem } from '../UI/FilePreviewItem';
 
 export class IssueForm extends React.Component {
   constructor(props) {
@@ -54,11 +57,11 @@ export class IssueForm extends React.Component {
       this.props.onEditIssue({ issueData, issueFiles });
     } else {
       this.props.onCreateIssue({ issueData, issueFiles });
-      this.setState({
-        issueTitle: '',
-        issueDescription: '',
-        issueFiles: []
-      });
+      // this.setState({
+      //   issueTitle: '',
+      //   issueDescription: '',
+      //   issueFiles: []
+      // });
     }
   }
 
@@ -66,6 +69,12 @@ export class IssueForm extends React.Component {
     const {
       issueTitle, issueDescription, issueFiles, showUploadFileForm
     } = this.state;
+    const { uploadingFiles } = this.props;
+    const options = [
+      { value: 'chocolate', label: 'Chocolate' },
+      { value: 'strawberry', label: 'Strawberry' },
+      { value: 'vanilla', label: 'Vanilla' }
+    ];
     return (
       <div>
         <StyledIssueForm onSubmit={this.handleSubmit}>
@@ -77,8 +86,33 @@ export class IssueForm extends React.Component {
             <span>Description</span>
             <Textarea id="description" name="issueDescription" onChange={this.handleChangeInput} value={issueDescription} />
           </Label>
+          <Label htmlFor="description">
+            <span>For</span>
+            <Select options={options} />
+          </Label>
           <SmButton type="button" onClick={this.handleModal}><MdAttachFile /></SmButton>
-          {issueFiles.length > 0 ? `Прикреплено файлов: ${issueFiles.length}` : null}
+          {issueFiles.length > 0 ?
+            <div>
+              <p>{`Прикреплено файлов: ${issueFiles.length}`}</p>
+              <FilesList>
+                {
+                  issueFiles.map((file, i) => (
+                    <li key={file.lastModified}>
+                      <FilePreviewItem>
+                        {
+                        /* eslint-disable */
+                        RegExp('image', 'i').test(file.type) ?
+                          <img src={file.preview} alt={file.name} />
+                        : RegExp('audio', 'i').test(file.type) ? <MdAudiotrack /> : <MdInsertDriveFile />
+                        /* eslint-disable */
+                      }
+                    </FilePreviewItem>
+                      {uploadingFiles? <p>{uploadingFiles[i].progress.toFixed() + '%'}</p> : null}
+                    </li>
+                  ))
+                }
+              </FilesList>
+            </div> : null}
           <Button type="submit" disabled={!issueTitle}>{this.props.issue.issueId ? 'Edit' : 'Create'}</Button>
         </StyledIssueForm>
         <Modal
@@ -100,10 +134,21 @@ IssueForm.defaultProps = {
   },
   onEditIssue: null,
   onCreateIssue: null,
+  uploadingFiles: [
+    {
+      name: 'Mitch Murder - The Real Deal - 05 Prime Operator.mp3',
+      progress: 36,
+    },
+    {
+      name: 'index.html',
+      progress: 66,
+    },
+  ],
 };
 
 IssueForm.propTypes = {
   onCreateIssue: PropTypes.func,
   onEditIssue: PropTypes.func,
-  issue: PropTypes.objectOf(PropTypes.any)
+  issue: PropTypes.objectOf(PropTypes.any),
+  uploadingFiles: PropTypes.array,
 };

@@ -11,14 +11,17 @@ import { IssueForm } from '../../components/IssueForm';
 
 class NewIssue extends React.Component {
   handleCreateIssue = (createIssueData) => {
-    this.props.createIssueRequest(createIssueData);
+    this.props.createIssueRequest({ user: this.props.user.email, createIssueData });
   }
 
   render() {
     return (
       <Page>
         <h1>Create Issue</h1>
-        <IssueForm onCreateIssue={this.handleCreateIssue} />
+        <IssueForm
+          // uploadingFiles={this.props.issues.uploadingFiles || []}
+          onCreateIssue={this.handleCreateIssue}
+        />
       </Page>
     );
   }
@@ -26,7 +29,8 @@ class NewIssue extends React.Component {
 
 export const NewIssuePage = connect(
   state => ({
-    user: state.persistedUser
+    user: state.persistedUser,
+    issues: state.issues,
   }),
   dispatch => ({
     createIssueRequest: bindActionCreators(createIssueRequest, dispatch)
@@ -35,5 +39,6 @@ export const NewIssuePage = connect(
 
 
 NewIssue.propTypes = {
-  createIssueRequest: PropTypes.func.isRequired
+  createIssueRequest: PropTypes.func.isRequired,
+  issues: PropTypes.objectOf(PropTypes.any).isRequired,
 };

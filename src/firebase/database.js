@@ -8,7 +8,36 @@ import 'firebase/database';
 
 const database = firebase.database();
 
-export function createIssueData(issueId, createdAt, issueTitle, issueDescription, createdDate, attachedFiles) {
+export function addUserToDb(userEmail) {
+
+  const user = userEmail.split('@')[0];
+
+  const userData = {
+    email: userEmail,
+    issues: [],
+  };
+
+  return new Promise((resolve, reject) => {
+    firebase.database().ref('/users/' + user).set(userData)
+    .then(() => resolve())
+    .catch((error) => reject(error));
+  });
+}
+
+export function createUserWithEmailAndPassword(email, password) {
+  return new Promise((resolve, reject) => {
+    firebase.auth().createUserWithEmailAndPassword(email, password)
+      .then((response) => {
+        resolve(response);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+}
+
+
+export function createIssue(user, issueId, createdAt, issueTitle, issueDescription, createdDate, attachedFiles) {
 
   const issueData = {
     issueId: issueId,
@@ -19,7 +48,7 @@ export function createIssueData(issueId, createdAt, issueTitle, issueDescription
   };
 
   return new Promise((resolve, reject) => {
-    firebase.database().ref('issues/' + issueId).set(issueData)
+    firebase.database().ref(user + '/issues/' + issueId).set(issueData)
     .then(() => resolve(issueData))
     .catch((error) => reject(error));
   });

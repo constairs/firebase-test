@@ -1,4 +1,4 @@
-import { takeLatest, call, put } from 'redux-saga/effects';
+import { takeLatest, take, call, put } from 'redux-saga/effects';
 import { push } from 'connected-react-router';
 import {
   CREATE_ISSUE_REQUEST,
@@ -6,11 +6,14 @@ import {
   EDIT_ISSUE_REQUEST,
   FETCH_ISSUES_REQUEST,
   GET_ISSUE_REQUEST,
-  DOWNLOAD_ATTACHMENT_REQUEST
+  DOWNLOAD_ATTACHMENT_REQUEST,
+  UPLOAD_CANCEL,
+  UPLOAD_PAUSED,
+  UPLOAD_RESUME
 } from './types';
 
 import {
-  createIssueData,
+  createIssue,
   deleteIssueData,
   editIssueData,
   fetchIssues,
@@ -20,7 +23,7 @@ import {
 import {
   uploadFiles,
   downloadFiles,
-  getFileMetadata
+  getFileMetadata,
 } from '../../firebase/storage';
 
 import {
@@ -35,33 +38,110 @@ import {
   getIssueSuccessed,
   getIssueFailed,
   downloadAttachmentSuccessed,
-  downloadAttachmentFailed
+  downloadAttachmentFailed,
+  uploadFilesRequest,
+  uploadCancelSuccessed,
+  uploadCancelFailed,
+  uploadPausedSuccessed,
+  uploadPausedFailed,
+  uploadRunningSuccessed,
+  uploadRunningFailed
 } from './actions';
+
+function* cancelUploadSaga(action) {
+  try {
+    yield call(action.payload.cancel);
+    yield put(uploadCancelSuccessed());
+  } catch (error) {
+    yield put(uploadCancelFailed(error));
+  }
+}
+
+function* pauseUploadSaga(action) {
+  try {
+    yield call(action.payload.pause);
+    yield put(uploadPausedSuccessed());
+  } catch (error) {
+    yield put(uploadPausedFailed(error));
+  }
+}
+
+function* resumeUploadSaga(action) {
+  try {
+    yield call(action.payload.pause);
+    yield put(uploadRunningSuccessed());
+  } catch (error) {
+    uploadRunningFailed(error);
+  }
+}
+
+export function* uploadFileSaga(files) {
+  const uploadTasks = yield call(uploadFiles, files);
+
+  yield put(uploadFilesRequest(uploadTasks));
+
+  // uploadTask.pause();
+
+  // uploadTask.resume();
+
+  // uploadTask.cancel();
+
+  yield take(UPLOAD_CANCEL, cancelUploadSaga);
+  yield take(UPLOAD_PAUSED, pauseUploadSaga);
+  yield take(UPLOAD_RESUME, resumeUploadSaga);
+
+  const filesLinks = uploadTasks.snapshot.ref.getDownloadURL();
+
+  const filesWithLinks = files.map((file, i) =>
+    ({
+      type: file.type,
+      size: file.size,
+      name: file.name,
+      lastModified: file.lastModified,
+      downloadUrl: filesLinks[i]
+    })
+  );
+
+  return filesWithLinks;
+}
 
 export function* createIssueSaga(action) {
   try {
-    if (action.payload.issueFiles.length > 0) {
-      const files = action.payload.issueFiles;
-      const filesLinks = yield call(uploadFiles, action.payload.issueFiles);
+    if (action.payload.createIssueData.issueFiles.length > 0) {
+      const files = action.payload.createIssueData.issueFiles;
 
-      const filesWithLinks = files.map((file, i) =>
-        ({
-          type: file.type,
-          size: file.size,
-          name: file.name,
-          lastModified: file.lastModified,
-          downloadUrl: filesLinks[i]
-        })
-      );
+      // const uploadTask = yield call(uploadFiles, action.payload.createIssueData.issueFiles);
+
+      // const filesLinks = uploadTask.snapshot.ref.getDownloadURL();
+
+      // const filesLinks = yield call(uploadFiles, action.payload.createIssueData.issueFiles);
+
+      // const filesWithLinks = files.map((file, i) =>
+      //   ({
+      //     type: file.type,
+      //     size: file.size,
+      //     name: file.name,
+      //     lastModified: file.lastModified,
+      //     downloadUrl: filesLinks[i]
+      //   })
+      // );
+      const filesWithLinks = yield call(uploadFileSaga, files);
+
       const issueWithFilesLinks = [
         ...action.payload.issueData,
         filesWithLinks,
       ];
-      const createResponse = yield call(createIssueData, ...issueWithFilesLinks);
+      const createResponse = yield call(createIssue, ...issueWithFilesLinks);
       yield put(createIssueSuccessed(createResponse));
       yield put(push('/issues'));
     } else {
-      const createResponse = yield call(createIssueData, ...action.payload.issueData);
+      const createResponse = yield call(
+        createIssue,
+        [
+          action.payload.createIssueData.user,
+          ...action.payload.createIssueData.issueData
+        ]
+      );
       yield put(createIssueSuccessed(createResponse));
       yield put(push('/issues'));
     }

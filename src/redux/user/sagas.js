@@ -43,9 +43,12 @@ import {
   resetPassword
 } from '../../firebase/userFuctions';
 
+import { addUserToDb } from '../../firebase/database';
+
 export function* userCreateSaga(action) {
   try {
     const createResponse = yield call(createUserWithEmailAndPassword, ...action.payload);
+    yield call(addUserToDb, action.payload[0]);
     yield put(userCreateSuccessed(createResponse));
     yield put(push('/profile'));
   } catch (error) {

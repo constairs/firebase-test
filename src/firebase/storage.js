@@ -2,6 +2,14 @@ import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/storage';
 
+import {
+  uploadProgressChanged,
+  // uploadPaused,
+  // uploadRunning
+} from '../redux/issues/actions';
+import { store } from '../application';
+
+
 /* eslint-disable */
   import { app } from './index';
 /* eslint-disable */
@@ -26,13 +34,13 @@ export function uploadFiles(files) {
     uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
       (snapshot) => {
         let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        console.log('Upload is ' + progress + '% done');
+        store.store.dispatch(uploadProgressChanged({name: file.name, progress}));
         switch (snapshot.state) {
           case firebase.storage.TaskState.PAUSED:
-            console.log('Upload is paused');
+            // store.store.dispatch(uploadPaused(uploadTask));
             break;
           case firebase.storage.TaskState.RUNNING:
-            console.log('Upload is running');
+            // store.store.dispatch(uploadRunning(uploadTask));
             break;
         }
       }, (error) => {
@@ -48,11 +56,12 @@ export function uploadFiles(files) {
       }
     }, () => {
       uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
-        console.log(downloadURL);
+        // console.log(downloadURL);
       });
     });
 
-    return uploadTask.snapshot.ref.getDownloadURL();
+    return uploadTask;
+    // return uploadTask.snapshot.ref.getDownloadURL();
   }
 
   return Promise.all(
@@ -125,7 +134,6 @@ export function getFileMetadata(filename) {
 
   });
 }
-
 
 export function updateMetadata(filename, newMetadata) {
   return new Promise((resolve, reject) => {
