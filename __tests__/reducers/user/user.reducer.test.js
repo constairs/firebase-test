@@ -1,9 +1,24 @@
 import { user as reducer, initState } from '../../../src/redux/user/reducer';
 import * as actions from '../../../src/redux/user/actions';
 
-import { userData, logoutResponse, deleteResponse } from '../../fixtures';
+import { userData, logoutResponse, deleteResponse, fetchResponse } from '../../fixtures';
 
 describe('user create', () => {
+  it('fetchUsersRequest', () => {
+    const state = reducer(initState, actions.fetchUsersRequest());
+    expect(state.userFetching).toBe(true);
+  });
+  it('fetchUsersSuccessed', () => {
+    const state = reducer(initState, actions.fetchUsersSuccessed(fetchResponse));
+    expect(state.userFetching).toBe(false);
+    expect(state.users.users).toEqual([...fetchResponse]);
+  });
+  it('fetchUsersFailed', () => {
+    const state = reducer(initState, actions.fetchUsersFailed(Error.message));
+    expect(state.userFetching).toBe(false);
+    expect(state.notification).toEqual({ show: true, error: Error.message, success: '' });
+  });
+
   it('userCreateRequest', () => {
     const state = reducer(initState, actions.userCreateRequest());
     expect(state.userFetching).toBe(true);

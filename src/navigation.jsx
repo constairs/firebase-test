@@ -10,6 +10,7 @@ import { IssuesPage } from './containers/IssuesPage';
 import { NewIssuePage } from './containers/NewIssuePage';
 import { EditIssuePage } from './containers/EditIssuePage';
 import { IssuePage } from './containers/IssuePage';
+import { MyIssuesPage } from './containers/MyIssuesPage';
 import { history } from './redux/store';
 import { Header } from './containers/Header';
 
@@ -55,6 +56,7 @@ export const Navigation = () => (
         <PrivateRoute component={NewIssuePage} exact path="/issues/new" />
         <PrivateRoute component={IssuePage} exact path="/issues/issue/" />
         <PrivateRoute component={EditIssuePage} exact path="/issues/issue/edit" />
+        <PrivateRoute component={MyIssuesPage} exact path="/my_issues" />
       </Switch>
     </React.Fragment>
   </ConnectedRouter>

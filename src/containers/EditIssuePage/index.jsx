@@ -12,11 +12,11 @@ import { IssueForm } from '../../components/IssueForm';
 
 class EditIssue extends React.Component {
   handleCreateIssue = (createIssueData) => {
-    this.props.createIssueRequest(createIssueData);
+    this.props.createIssueRequest({ user: this.props.user.email, createIssueData });
   }
 
-  handleEditIssue= (issueData) => {
-    this.props.editIssueRequest(issueData);
+  handleEditIssue= (editIssueData) => {
+    this.props.editIssueRequest({ user: this.props.user.email, editIssueData });
   }
 
   addNesIssue = () => {
@@ -41,6 +41,7 @@ class EditIssue extends React.Component {
 export const EditIssuePage = connect(
   state => ({
     issues: state.issues,
+    user: state.persistedUser,
   }),
   dispatch => ({
     createIssueRequest: bindActionCreators(createIssueRequest, dispatch),
@@ -53,4 +54,5 @@ EditIssue.propTypes = {
   createIssueRequest: PropTypes.func.isRequired,
   editIssueRequest: PropTypes.func.isRequired,
   issues: PropTypes.objectOf(PropTypes.any).isRequired,
+  user: PropTypes.objectOf(PropTypes.any).isRequired,
 };

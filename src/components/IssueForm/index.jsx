@@ -22,12 +22,17 @@ export class IssueForm extends React.Component {
       issueDescription: props.issue.description || '',
       issueFiles: props.issue.attachedFiles || [],
       showUploadFileForm: false,
+      issueFor: props.issue.for || '',
     };
   }
 
   handleChangeInput = ({ target }) => {
     const { name, value } = target;
     this.setState({ [name]: value, showUploadFileForm: false, });
+  }
+
+  handleChangeSelect = (issueFor) => {
+    this.setState({ issueFor });
   }
 
   handleModal = () => {
@@ -49,6 +54,7 @@ export class IssueForm extends React.Component {
       this.props.issue.createdAt || Date.now(),
       this.state.issueTitle,
       this.state.issueDescription,
+      this.state.issueFor,
       this.props.issue.createdAt ? Date.now() : null,
     ];
     const { issueFiles } = this.state;
@@ -57,24 +63,26 @@ export class IssueForm extends React.Component {
       this.props.onEditIssue({ issueData, issueFiles });
     } else {
       this.props.onCreateIssue({ issueData, issueFiles });
-      // this.setState({
-      //   issueTitle: '',
-      //   issueDescription: '',
-      //   issueFiles: []
-      // });
+      this.setState({
+        issueTitle: '',
+        issueDescription: '',
+        issueFor: '',
+        issueFiles: []
+      });
     }
   }
 
   render() {
     const {
-      issueTitle, issueDescription, issueFiles, showUploadFileForm
+      issueTitle, issueDescription, issueFiles, showUploadFileForm, issueFor
     } = this.state;
-    const { uploadingFiles } = this.props;
-    const options = [
-      { value: 'chocolate', label: 'Chocolate' },
-      { value: 'strawberry', label: 'Strawberry' },
-      { value: 'vanilla', label: 'Vanilla' }
-    ];
+    const {
+      // uploadingFiles,
+      users
+    } = this.props;
+
+    const options = users.map(user => ({ value: user.email.split('@')[0], label: user.email.split('@')[0], }));
+
     return (
       <div>
         <StyledIssueForm onSubmit={this.handleSubmit}>
@@ -86,9 +94,9 @@ export class IssueForm extends React.Component {
             <span>Description</span>
             <Textarea id="description" name="issueDescription" onChange={this.handleChangeInput} value={issueDescription} />
           </Label>
-          <Label htmlFor="description">
+          <Label htmlFor="for">
             <span>For</span>
-            <Select options={options} />
+            <Select id="for" name="issueFor" onChange={this.handleChangeSelect} value={issueFor} options={options} />
           </Label>
           <SmButton type="button" onClick={this.handleModal}><MdAttachFile /></SmButton>
           {issueFiles.length > 0 ?
@@ -96,7 +104,7 @@ export class IssueForm extends React.Component {
               <p>{`Прикреплено файлов: ${issueFiles.length}`}</p>
               <FilesList>
                 {
-                  issueFiles.map((file, i) => (
+                  issueFiles.map(file => (
                     <li key={file.lastModified}>
                       <FilePreviewItem>
                         {
@@ -107,7 +115,7 @@ export class IssueForm extends React.Component {
                         /* eslint-disable */
                       }
                     </FilePreviewItem>
-                      {uploadingFiles? <p>{uploadingFiles[i].progress.toFixed() + '%'}</p> : null}
+                      {/* {uploadingFiles? <p>{uploadingFiles[i].progress.toFixed() + '%'}</p> : null} */}
                     </li>
                   ))
                 }
@@ -132,6 +140,7 @@ IssueForm.defaultProps = {
     title: '',
     description: ''
   },
+  users: [],
   onEditIssue: null,
   onCreateIssue: null,
   uploadingFiles: [
@@ -149,6 +158,7 @@ IssueForm.defaultProps = {
 IssueForm.propTypes = {
   onCreateIssue: PropTypes.func,
   onEditIssue: PropTypes.func,
+  users: PropTypes.arrayOf(PropTypes.any),
   issue: PropTypes.objectOf(PropTypes.any),
   uploadingFiles: PropTypes.array,
 };

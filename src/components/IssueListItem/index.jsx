@@ -21,8 +21,9 @@ export class IssueListItem extends React.Component {
 
   render() {
     const {
-      title, description, createdAt, attachedFiles
+      title, description, createdAt, attachedFiles, owner
     } = this.props.item;
+    const { username } = this.props;
     return (
       <StyledIssueItem onClick={this.handleClickItem}>
         <Panel>
@@ -58,7 +59,7 @@ export class IssueListItem extends React.Component {
             </FilesList>
           )
         : null}
-          <Button onClick={this.handleClickDelete}>Удалить</Button>
+          { username.split('@')[0] === owner ? <Button onClick={this.handleClickDelete}>Удалить</Button> : null }
         </Panel>
       </StyledIssueItem>
     );
@@ -70,4 +71,5 @@ IssueListItem.propTypes = {
   onClickItem: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
   item: PropTypes.objectOf(PropTypes.any).isRequired,
+  username: PropTypes.string.isRequired,
 };

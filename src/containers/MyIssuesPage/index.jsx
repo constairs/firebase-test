@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import styled from 'styled-components';
+import { history } from '../../redux/store';
 
 import {
   fetchIssuesRequest,
@@ -15,6 +16,7 @@ import { fetchUsersRequest } from '../../redux/user/actions';
 
 import { Page } from '../../components/UI/Page';
 import { Spinner } from '../../components/UI/Spinner';
+import { Button } from '../../components/UI/Button';
 import { IssuesNotification } from '../IssuesNotification';
 import { IssueList } from '../../components/IssueList';
 
@@ -27,7 +29,12 @@ const Preloader = styled.div`
 
 class Issues extends React.Component {
   componentWillMount() {
-    this.props.fetchIssuesRequest({ user: this.props.user.email, forOwner: false });
+    this.props.fetchIssuesRequest({ user: this.props.user.email, forOwner: true });
+    this.props.fetchUsersRequest();
+  }
+
+  addNewIssue = () => {
+    history.push('/issues/new');
   }
 
   handleDelete = (issueId) => {
@@ -58,6 +65,7 @@ class Issues extends React.Component {
               onGetIssue={this.handleGetIssue}
               onAttachmentDownload={this.handleAttachmentDownload}
             />
+            <Button onClick={this.addNewIssue}>New issue</Button>
           </div>
 
         )
@@ -65,6 +73,7 @@ class Issues extends React.Component {
         (
           <div>
             {issuesFetching ? <Preloader><Spinner /></Preloader> : <h1>No issues</h1>}
+            <Button onClick={this.addNewIssue}>New issue</Button>
           </div>
         )
         }
@@ -74,7 +83,7 @@ class Issues extends React.Component {
   }
 }
 
-export const IssuesPage = connect(
+export const MyIssuesPage = connect(
   state => ({
     issues: state.issues,
     user: state.persistedUser,
@@ -95,5 +104,6 @@ Issues.propTypes = {
   editIssueRequest: PropTypes.func.isRequired,
   getIssueRequest: PropTypes.func.isRequired,
   issues: PropTypes.objectOf(PropTypes.any).isRequired,
+  fetchUsersRequest: PropTypes.func.isRequired,
   user: PropTypes.objectOf(PropTypes.any).isRequired,
 };

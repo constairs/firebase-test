@@ -42,6 +42,7 @@ class Issue extends React.Component {
       currentIssue,
       issueFetching
     } = this.props.issues;
+    const { email } = this.props.user;
     return (
       <StyledIssuePage>
         {
@@ -54,6 +55,7 @@ class Issue extends React.Component {
                 (
                   <IssueItem
                     issue={currentIssue}
+                    username={email}
                     onEdit={this.handleClickEdit}
                     onAttachmentDownload={this.handleAttachmentDownload}
                   />
@@ -74,6 +76,7 @@ class Issue extends React.Component {
 export const IssuePage = connect(
   state => ({
     issues: state.issues,
+    user: state.persistedUser,
   }),
   dispatch => ({
     fetchIssuesRequest: bindActionCreators(fetchIssuesRequest, dispatch),
@@ -87,4 +90,5 @@ Issue.propTypes = {
   fetchIssuesRequest: PropTypes.func.isRequired,
   deleteIssueRequest: PropTypes.func.isRequired,
   issues: PropTypes.objectOf(PropTypes.any).isRequired,
+  user: PropTypes.objectOf(PropTypes.any).isRequired,
 };

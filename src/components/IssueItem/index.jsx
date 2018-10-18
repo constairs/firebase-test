@@ -20,7 +20,9 @@ export class IssueItem extends React.Component {
       description,
       createdAt,
       attachedFiles,
+      owner
     } = this.props.issue;
+    const { username } = this.props;
     return (
       <div>
         <p>{moment(createdAt).locale('ru').format('LLL')}</p>
@@ -55,7 +57,7 @@ export class IssueItem extends React.Component {
           </FilesList>
           )
         : null}
-        <Button onClick={this.handleClickEdit}>Редактировать</Button>
+        { username.split('@')[0] === owner ? <Button onClick={this.handleClickEdit}>Редактировать</Button> : null }
       </div>
     );
   }
@@ -65,4 +67,5 @@ export class IssueItem extends React.Component {
 IssueItem.propTypes = {
   onEdit: PropTypes.func.isRequired,
   issue: PropTypes.objectOf(PropTypes.any).isRequired,
+  username: PropTypes.string.isRequired,
 };

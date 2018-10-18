@@ -15,11 +15,12 @@ class NewIssue extends React.Component {
   }
 
   render() {
+    const { users } = this.props.user;
     return (
       <Page>
         <h1>Create Issue</h1>
         <IssueForm
-          // uploadingFiles={this.props.issues.uploadingFiles || []}
+          users={users}
           onCreateIssue={this.handleCreateIssue}
         />
       </Page>
@@ -40,5 +41,5 @@ export const NewIssuePage = connect(
 
 NewIssue.propTypes = {
   createIssueRequest: PropTypes.func.isRequired,
-  issues: PropTypes.objectOf(PropTypes.any).isRequired,
+  user: PropTypes.objectOf(PropTypes.any).isRequired,
 };

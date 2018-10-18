@@ -24,37 +24,35 @@ export function addUserToDb(userEmail) {
   });
 }
 
-export function createUserWithEmailAndPassword(email, password) {
+export function fetchUsers() {
   return new Promise((resolve, reject) => {
-    firebase.auth().createUserWithEmailAndPassword(email, password)
-      .then((response) => {
-        resolve(response);
-      })
-      .catch((error) => {
-        reject(error);
-      });
+    firebase.database().ref('/users/').once('value')
+    .then((snapshot) => {
+      resolve(snapshot.val());
+    })
+    .catch((error) => reject(error));
   });
 }
 
-
-export function createIssue(user, issueId, createdAt, issueTitle, issueDescription, createdDate, attachedFiles) {
-
+export function createIssue(user, issueId, createdAt, issueTitle, issueDescription, issueFor, createdDate, attachedFiles = []) {
   const issueData = {
     issueId: issueId,
     title: issueTitle,
     createdAt: createdAt,
     description: issueDescription,
-    attachedFiles: attachedFiles
+    for: issueFor.value,
+    attachedFiles: attachedFiles,
+    owner: user.split('@')[0],
   };
 
   return new Promise((resolve, reject) => {
-    firebase.database().ref(user + '/issues/' + issueId).set(issueData)
+    firebase.database().ref('/issues/' + issueId).set(issueData)
     .then(() => resolve(issueData))
     .catch((error) => reject(error));
   });
 }
 
-export function editIssueData(issueId, createdAt, issueTitle, issueDescription, updatedAt, attachedFiles = []) {
+export function editIssue(user, issueId, createdAt, issueTitle, issueDescription, issueFor, updatedAt, attachedFiles = []) {
 
   const updatedIssue = {
     issueId: issueId,
@@ -62,8 +60,11 @@ export function editIssueData(issueId, createdAt, issueTitle, issueDescription, 
     createdAt: createdAt,
     updatedAt: updatedAt,
     description: issueDescription,
-    attachedFiles: attachedFiles
+    for: issueFor,
+    attachedFiles: attachedFiles,
+    owner: user.split('@')[0],
   };
+
 
   console.log(updatedIssue);
 
@@ -79,8 +80,6 @@ export function editIssueData(issueId, createdAt, issueTitle, issueDescription, 
   });
 }
 
-
-
 export function deleteIssueData(issueId) {
   return new Promise((resolve, reject) => {
     firebase.database().ref('/issues/' + issueId).remove()
@@ -89,14 +88,27 @@ export function deleteIssueData(issueId) {
   });
 }
 
-export function fetchIssues() {
-  return new Promise((resolve, reject) => {
-    firebase.database().ref('/issues/').once('value')
-    .then((snapshot) => {
-      resolve(snapshot.val());
-    })
-    .catch((error) => reject(error));
-  });
+export function fetchIssues(fetchingParams) {
+  const filter = fetchingParams.user.split('@')[0];
+  const ref = firebase.database().ref('/issues/');
+
+  if(fetchingParams.forOwner) {
+    return new Promise((resolve, reject) => {
+      ref.orderByChild('owner').equalTo(filter).once('value')
+      .then((snapshot) => {
+        resolve(snapshot.val());
+      })
+      .catch((error) => reject(error));
+    });
+  } else {
+    return new Promise((resolve, reject) => {
+      ref.orderByChild('for').equalTo(filter).once('value')
+      .then((snapshot) => {
+        resolve(snapshot.val());
+      })
+      .catch((error) => reject(error));
+    });
+  }
 }
 
 export function getIssue(issueId) {

@@ -101,8 +101,9 @@ export const editIssueFailed = error => ({
   payload: error
 });
 
-export const fetchIssuesRequest = () => ({
-  type: TYPES.FETCH_ISSUES_REQUEST
+export const fetchIssuesRequest = fetchingParams => ({
+  type: TYPES.FETCH_ISSUES_REQUEST,
+  payload: fetchingParams
 });
 export const fetchIssuesSuccessed = fetchIssuesResponse => ({
   type: TYPES.FETCH_ISSUES_SUCCESSED,
