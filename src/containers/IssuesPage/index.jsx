@@ -59,7 +59,6 @@ class Issues extends React.Component {
               onAttachmentDownload={this.handleAttachmentDownload}
             />
           </div>
-
         )
         :
         (

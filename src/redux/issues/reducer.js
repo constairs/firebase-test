@@ -10,14 +10,12 @@ import {
   filter,
   map,
   when,
-  ifElse,
   path,
   equals,
-  has,
-  isEmpty,
+  propSatisfies,
   findIndex,
-  view,
-  prop
+  propEq,
+  ifElse
 } from 'ramda';
 
 import { createReducer } from '../../utils/reducerUtils';
@@ -39,8 +37,6 @@ export const initState = {
 const issuesLens = lensProp('issues');
 
 const filesLens = lensProp('uploadingFiles');
-
-const files = prop('uploadingFiles');
 
 const createIssueRequest = () => assoc('issueFetching', true);
 const createIssueSuccessed = createResponse => pipe(
@@ -110,17 +106,16 @@ const getIssueFailed = error => pipe(
 const uploadFilesRequest = uploadTask => assoc('uploadingFiles', uploadTask);
 
 const uploadProgressChanged = progressData => ifElse(
-  isEmpty(files),
+  propSatisfies(x => x.length === 0, 'uploadingFiles'),
   over(filesLens, append(progressData)),
-  when(
-    findIndex(has(`${progressData.name}`, view(filesLens))),
-    over(filesLens, map(file => (file.name === `${progressData.name}` ? progressData : file))),
-  ),
-  // findIndex(has(`${progressData.name}`, view(filesLens))),
-  // over(filesLens, map(file => (file.name === `${progressData.name}` ? progressData : file))),
-  // over(filesLens, append(progressData)),
+  ifElse(
+    findIndex(propEq('name', progressData.name)),
+    over(filesLens, append(progressData)),
+    over(filesLens, map(file => (
+      file.name === progressData.name ? progressData : file
+    ))),
+  )
 );
-
 
 const downloadAttachmentRequest = () => assoc('issueFetching', true);
 const downloadAttachmentSuccessed = downloadRes => pipe(

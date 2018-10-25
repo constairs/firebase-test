@@ -1,3 +1,5 @@
+import { values } from 'ramda';
+
 import { user as reducer, initState } from '../../../src/redux/user/reducer';
 import * as actions from '../../../src/redux/user/actions';
 
@@ -11,7 +13,7 @@ describe('user create', () => {
   it('fetchUsersSuccessed', () => {
     const state = reducer(initState, actions.fetchUsersSuccessed(fetchResponse));
     expect(state.userFetching).toBe(false);
-    expect(state.users.users).toEqual([...fetchResponse]);
+    expect(state.users).toEqual(values(fetchResponse));
   });
   it('fetchUsersFailed', () => {
     const state = reducer(initState, actions.fetchUsersFailed(Error.message));

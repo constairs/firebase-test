@@ -212,7 +212,7 @@ export function* getIssueSaga(action) {
   try {
     const issue = yield call(getIssue, action.payload);
     yield put(getIssueSuccessed(issue));
-    yield put(push('/issues/issue/'));
+    yield put(push(`/issues/issue/:${action.payload}`));
   } catch (error) {
     yield put(getIssueFailed(error.message));
   }
@@ -222,7 +222,6 @@ export function* downloadAttachmentSaga(action) {
   try {
     const dowloadRes = yield call(downloadFiles, action.payload);
     const downloadMeta = yield call(getFileMetadata, action.payload);
-
     const file = { dowloadRes, downloadMeta };
     yield put(downloadAttachmentSuccessed(file));
   } catch (error) {

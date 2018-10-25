@@ -13,11 +13,13 @@ const progressDataNew = {
 
 describe('issues reducer', () => {
   it('uploadProgressChanged', () => {
-    let state = reducer(initState, actions.uploadProgressChanged(progressData));
+    const state = reducer(initState, actions.uploadProgressChanged(progressData));
     expect(state.uploadingFiles).toEqual([progressData]);
-    state = reducer(state, actions.uploadProgressChanged(progressDataNew));
-    expect(state.uploadingFiles).toEqual([progressData, progressDataNew]);
-    state = reducer(state, actions.uploadProgressChanged(progressDataNew));
-    expect(state.uploadingFiles).toEqual([progressData, progressDataNew]);
+    const stateUpd = reducer(state, actions.uploadProgressChanged(progressDataNew));
+    // state = reducer(state, actions.uploadProgressChanged(progressDataNew));
+    expect(stateUpd.uploadingFiles).toEqual([progressData, progressDataNew]);
+    const statUpdLast = reducer(stateUpd, actions.uploadProgressChanged(progressDataNew));
+    // state = reducer(state, actions.uploadProgressChanged(progressDataNew));
+    expect(statUpdLast.uploadingFiles).toEqual([progressData, progressDataNew]);
   });
 });
