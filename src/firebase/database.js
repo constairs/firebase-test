@@ -45,11 +45,13 @@ export function createIssue(user, issueId, createdAt, issueTitle, issueDescripti
     owner: user.split('@')[0],
   };
 
-  return new Promise((resolve, reject) => {
-    firebase.database().ref('/issues/' + issueId).set(issueData)
-    .then(() => resolve(issueData))
-    .catch((error) => reject(error));
-  });
+  return Promise.all([
+    firebase.database().ref('/users/' + issueData.owner + '/myIssues/').set(issueData),
+    firebase.database().ref('/users/' + issueFor.value + '/issues/').set(issueData),
+  ]).then(() => {
+    return issueData
+  })
+  .catch((error) => reject(error));
 }
 
 export function editIssue(user, issueId, createdAt, issueTitle, issueDescription, issueFor, updatedAt, attachedFiles = []) {

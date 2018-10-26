@@ -6,6 +6,7 @@ import {
   uploadProgressChanged,
   // uploadPaused,
   // uploadRunning
+  // uploadCancel
 } from '../redux/issues/actions';
 import { store } from '../application';
 
@@ -41,6 +42,9 @@ export function uploadFiles(files) {
             break;
           case firebase.storage.TaskState.RUNNING:
             // store.store.dispatch(uploadRunning(uploadTask));
+            break;
+          case firebase.storage.TaskState.CANCELED:
+            store.store.dispatch(uploadCancel(uploadTask));
             break;
         }
       }, (error) => {

@@ -82,6 +82,7 @@ export function* createIssueSaga(action) {
           ...action.payload.createIssueData.issueData
         ]
       );
+      console.log(createResponse);
       yield put(createIssueSuccessed(createResponse));
       yield put(push('/my_issues'));
     }
