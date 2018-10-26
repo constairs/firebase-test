@@ -54,7 +54,7 @@ export const Navigation = () => (
         <PrivateRoute component={ProfilePage} path="/profile" />
         <PrivateRoute component={IssuesPage} exact path="/issues" />
         <PrivateRoute component={NewIssuePage} exact path="/issues/new" />
-        <PrivateRoute component={IssuePage} exact path="/issues/issue/" />
+        <PrivateRoute component={IssuePage} path="/issues/issue/" />
         <PrivateRoute component={EditIssuePage} exact path="/issues/issue/edit" />
         <PrivateRoute component={MyIssuesPage} exact path="/my_issues" />
       </Switch>

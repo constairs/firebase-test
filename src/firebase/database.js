@@ -65,9 +65,6 @@ export function editIssue(user, issueId, createdAt, issueTitle, issueDescription
     owner: user.split('@')[0],
   };
 
-
-  console.log(updatedIssue);
-
   return new Promise((resolve, reject) => {
     firebase.database().ref('/issues/' + issueId).update(updatedIssue,
     (error) => {
@@ -75,9 +72,23 @@ export function editIssue(user, issueId, createdAt, issueTitle, issueDescription
         reject(error);
       }
       resolve(updatedIssue);
-    }
-      ).then(() => {resolve(updatedIssue)}).catch((error) => {reject(error)});
+    }).then(() => {resolve(updatedIssue)}).catch((error) => {reject(error)});
   });
+}
+
+export function answerIssue(answerData) {
+
+  return new Promise((resolve, reject) => {
+    firebase.database().ref('/issues/' + answerData.id + '/answer/').update(answerData.answerInfo,
+      (error) => {
+        if (error) {
+          reject(error);
+        }
+        resolve(answerData);
+      }
+    ).then(() => {resolve(answerData)}).catch((error) => {reject(error)});
+  })
+  
 }
 
 export function deleteIssueData(issueId) {

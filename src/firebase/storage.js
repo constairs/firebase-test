@@ -60,8 +60,8 @@ export function uploadFiles(files) {
       });
     });
 
-    return uploadTask;
-    // return uploadTask.snapshot.ref.getDownloadURL();
+    // return uploadTask;
+    return uploadTask.snapshot.ref.getDownloadURL();
   }
 
   return Promise.all(

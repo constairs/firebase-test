@@ -6,6 +6,7 @@ import { Button } from '../UI/Button';
 export const FilesList = styled.ul`
   display: flex;
   flex-wrap: wrap;
+  margin-bottom: 0;
   li {
     margin: 0 10px;
     display: block;

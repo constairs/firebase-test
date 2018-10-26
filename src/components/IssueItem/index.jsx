@@ -20,7 +20,8 @@ export class IssueItem extends React.Component {
       description,
       createdAt,
       attachedFiles,
-      owner
+      owner,
+      answer
     } = this.props.issue;
     const { username } = this.props;
     return (
@@ -58,6 +59,16 @@ export class IssueItem extends React.Component {
           )
         : null}
         { username.split('@')[0] === owner ? <Button onClick={this.handleClickEdit}>Редактировать</Button> : null }
+        {
+          answer ?
+          <div>
+            <h3>Answers</h3>
+            <p>
+              {answer.answerText}
+            </p>
+          </div>
+          : null
+        }
       </div>
     );
   }

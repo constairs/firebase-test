@@ -1,4 +1,4 @@
-import { takeLatest, take, call, put } from 'redux-saga/effects';
+import { takeLatest, call, put } from 'redux-saga/effects';
 import { push } from 'connected-react-router';
 import {
   CREATE_ISSUE_REQUEST,
@@ -7,9 +7,7 @@ import {
   FETCH_ISSUES_REQUEST,
   GET_ISSUE_REQUEST,
   DOWNLOAD_ATTACHMENT_REQUEST,
-  UPLOAD_CANCEL,
-  UPLOAD_PAUSED,
-  UPLOAD_RESUME
+  ISSUE_ANSWER_REQUEST
 } from './types';
 
 import {
@@ -18,6 +16,7 @@ import {
   editIssue,
   fetchIssues,
   getIssue,
+  answerIssue
 } from '../../firebase/database';
 
 import {
@@ -39,65 +38,9 @@ import {
   getIssueFailed,
   downloadAttachmentSuccessed,
   downloadAttachmentFailed,
-  uploadFilesRequest,
-  uploadCancelSuccessed,
-  uploadCancelFailed,
-  uploadPausedSuccessed,
-  uploadPausedFailed,
-  uploadRunningSuccessed,
-  uploadRunningFailed
+  issuesAnswerSuccessed,
+  issuesAnswerFailed,
 } from './actions';
-
-function* cancelUploadSaga(action) {
-  try {
-    yield call(action.payload.cancel);
-    yield put(uploadCancelSuccessed());
-  } catch (error) {
-    yield put(uploadCancelFailed(error));
-  }
-}
-
-function* pauseUploadSaga(action) {
-  try {
-    yield call(action.payload.pause);
-    yield put(uploadPausedSuccessed());
-  } catch (error) {
-    yield put(uploadPausedFailed(error));
-  }
-}
-
-function* resumeUploadSaga(action) {
-  try {
-    yield call(action.payload.pause);
-    yield put(uploadRunningSuccessed());
-  } catch (error) {
-    uploadRunningFailed(error);
-  }
-}
-
-export function* uploadFileSaga(files) {
-  const uploadTasks = yield call(uploadFiles, files);
-
-  yield put(uploadFilesRequest(uploadTasks));
-
-  yield take(UPLOAD_CANCEL, cancelUploadSaga);
-  yield take(UPLOAD_PAUSED, pauseUploadSaga);
-  yield take(UPLOAD_RESUME, resumeUploadSaga);
-
-  const filesLinks = uploadTasks.snapshot.ref.getDownloadURL();
-
-  const filesWithLinks = files.map((file, i) =>
-    ({
-      type: file.type,
-      size: file.size,
-      name: file.name,
-      lastModified: file.lastModified,
-      downloadUrl: filesLinks[i]
-    })
-  );
-
-  return filesWithLinks;
-}
 
 export function* createIssueSaga(action) {
   try {
@@ -127,6 +70,7 @@ export function* createIssueSaga(action) {
         ...action.payload.createIssueData.issueData,
         filesWithLinks,
       ];
+
       const createResponse = yield call(createIssue, ...issueWithFilesLinks);
       yield put(createIssueSuccessed(createResponse));
       yield put(push('/my_issues'));
@@ -212,7 +156,7 @@ export function* getIssueSaga(action) {
   try {
     const issue = yield call(getIssue, action.payload);
     yield put(getIssueSuccessed(issue));
-    yield put(push(`/issues/issue/:${action.payload}`));
+    yield put(push(`/issues/issue/${action.payload}`));
   } catch (error) {
     yield put(getIssueFailed(error.message));
   }
@@ -229,6 +173,16 @@ export function* downloadAttachmentSaga(action) {
   }
 }
 
+export function* issueAnswerSaga(action) {
+  try {
+    const res = yield call(answerIssue, action.payload);
+    yield put(issuesAnswerSuccessed(res));
+  } catch (error) {
+    yield put(issuesAnswerFailed(error.message));
+  }
+}
+
+
 export function* issuesSagas() {
   yield takeLatest(CREATE_ISSUE_REQUEST, createIssueSaga);
   yield takeLatest(DELETE_ISSUE_REQUEST, deleteIssueSaga);
@@ -236,4 +190,5 @@ export function* issuesSagas() {
   yield takeLatest(EDIT_ISSUE_REQUEST, editIssueSaga);
   yield takeLatest(FETCH_ISSUES_REQUEST, fetchIssuesSaga);
   yield takeLatest(DOWNLOAD_ATTACHMENT_REQUEST, downloadAttachmentSaga);
+  yield takeLatest(ISSUE_ANSWER_REQUEST, issueAnswerSaga);
 }

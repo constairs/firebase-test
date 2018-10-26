@@ -46,9 +46,9 @@ export const uploadRunningFailed = error => ({
   payload: error,
 });
 
-export const uploadCancel = uploadTask => ({
+export const uploadCancel = filename => ({
   type: TYPES.UPLOAD_CANCEL,
-  payload: uploadTask,
+  payload: filename,
 });
 export const uploadCancelSuccessed = () => ({
   type: TYPES.UPLOAD_CANCEL_SUCCESSED,
@@ -118,12 +118,10 @@ export const downloadAttachmentRequest = url => ({
   type: TYPES.DOWNLOAD_ATTACHMENT_REQUEST,
   payload: url
 });
-
 export const downloadAttachmentSuccessed = downloadRes => ({
   type: TYPES.DOWNLOAD_ATTACHMENT_SUCCESSED,
   payload: downloadRes
 });
-
 export const downloadAttachmentFailed = error => ({
   type: TYPES.DOWNLOAD_ATTACHMENT_FAILED,
   payload: error
@@ -131,4 +129,17 @@ export const downloadAttachmentFailed = error => ({
 
 export const closeNotification = () => ({
   type: TYPES.ISSUES_CLOSE_NOTIFICATION
+});
+
+export const issuesAnswerRequest = issueAnswerData => ({
+  type: TYPES.ISSUE_ANSWER_REQUEST,
+  payload: issueAnswerData
+});
+export const issuesAnswerSuccessed = answerData => ({
+  type: TYPES.ISSUE_ANSWER_SUCCESSED,
+  payload: answerData
+});
+export const issuesAnswerFailed = issueAnswerInfo => ({
+  type: TYPES.ISSUE_ANSWER_FAILED,
+  payload: issueAnswerInfo
 });

@@ -35,7 +35,6 @@ export const initState = {
 };
 
 const issuesLens = lensProp('issues');
-
 const filesLens = lensProp('uploadingFiles');
 
 const createIssueRequest = () => assoc('issueFetching', true);
@@ -109,11 +108,11 @@ const uploadProgressChanged = progressData => ifElse(
   propSatisfies(x => x.length === 0, 'uploadingFiles'),
   over(filesLens, append(progressData)),
   ifElse(
-    findIndex(propEq('name', progressData.name)),
-    over(filesLens, append(progressData)),
+    propSatisfies(x => findIndex(propEq('name', progressData.name), x) !== (-1), 'uploadingFiles'),
     over(filesLens, map(file => (
       file.name === progressData.name ? progressData : file
     ))),
+    over(filesLens, append(progressData)),
   )
 );
 
@@ -132,6 +131,25 @@ const issuesCloseNotification = () => pipe(
   assocPath(['notification', 'show'], false),
   assocPath(['notification', 'error'], ''),
   assocPath(['notification', 'success'], ''),
+);
+
+const issueAnswerRequest = () => assoc('issueFetching', true);
+
+const issueAnswerSuccessed = answerData => pipe(
+  assoc('issueFetching', false),
+  over(issuesLens, map(
+    issue => (issue.issueId === answerData.id ?
+      { ...issue, answer: answerData.answerInfo }
+      :
+      issue
+    )
+  ))
+);
+
+const issueAnswerFailed = error => pipe(
+  assoc('issueFetching', false),
+  assocPath(['notification', 'show'], true),
+  assocPath(['notification', 'error'], error),
 );
 
 const handlers = {
@@ -164,6 +182,10 @@ const handlers = {
   [TYPES.DOWNLOAD_ATTACHMENT_FAILED]: downloadAttachmentFailed,
 
   [TYPES.ISSUES_CLOSE_NOTIFICATION]: issuesCloseNotification,
+
+  [TYPES.ISSUE_ANSWER_REQUEST]: issueAnswerRequest,
+  [TYPES.ISSUE_ANSWER_SUCCESSED]: issueAnswerSuccessed,
+  [TYPES.ISSUE_ANSWER_FAILED]: issueAnswerFailed,
 };
 
 export const issues = createReducer(initState, handlers);

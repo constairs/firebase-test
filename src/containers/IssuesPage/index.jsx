@@ -26,7 +26,7 @@ const Preloader = styled.div`
 `;
 
 class Issues extends React.Component {
-  componentWillMount() {
+  componentDidMount() {
     this.props.fetchIssuesRequest({ user: this.props.user.email, forOwner: false });
   }
 
