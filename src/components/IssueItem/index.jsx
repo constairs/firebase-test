@@ -11,7 +11,7 @@ import { FilePreviewItem } from '../UI/FilePreviewItem';
 
 export class IssueItem extends React.Component {
   handleClickEdit = () => {
-    this.props.onEdit(this.props.issue.issueId);
+    this.props.onEdit(this.props.issue);
   }
 
   render() {
@@ -29,9 +29,10 @@ export class IssueItem extends React.Component {
         <p>{moment(createdAt).locale('ru').format('LLL')}</p>
         <h1>{title}</h1>
         <p>{description}</p>
-        {attachedFiles ? (
-          <FilesList>
-            {
+        {
+          attachedFiles ? (
+            <FilesList>
+              {
               attachedFiles.map(file =>
                 (
                   <li key={file.name}>
@@ -56,8 +57,7 @@ export class IssueItem extends React.Component {
               )
             }
           </FilesList>
-          )
-        : null}
+          ) : null}
         { username.split('@')[0] === owner ? <Button onClick={this.handleClickEdit}>Редактировать</Button> : null }
         {
           answer ?

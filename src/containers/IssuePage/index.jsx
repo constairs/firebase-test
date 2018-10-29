@@ -39,7 +39,7 @@ class Issue extends React.Component {
 
   answerIssue = (formData) => {
     this.props.issuesAnswerRequest({
-      id: this.props.issues.currentIssue.issueId,
+      issue: this.props.issues.currentIssue,
       answerInfo: formData
     });
   }
@@ -70,7 +70,11 @@ class Issue extends React.Component {
                       onEdit={this.handleClickEdit}
                       onAttachmentDownload={this.handleAttachmentDownload}
                     />
-                    <AnswerForm onAnswerForm={this.answerIssue} />
+                    {
+                      email.split('@')[0] === currentIssue.for ?
+                        <AnswerForm onAnswerForm={this.answerIssue} />
+                      : null
+                    }
                   </div>
                 )
               }

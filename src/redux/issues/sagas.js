@@ -82,7 +82,6 @@ export function* createIssueSaga(action) {
           ...action.payload.createIssueData.issueData
         ]
       );
-      console.log(createResponse);
       yield put(createIssueSuccessed(createResponse));
       yield put(push('/my_issues'));
     }
@@ -157,7 +156,7 @@ export function* getIssueSaga(action) {
   try {
     const issue = yield call(getIssue, action.payload);
     yield put(getIssueSuccessed(issue));
-    yield put(push(`/issues/issue/${action.payload}`));
+    yield put(push('/issues/issue/'));
   } catch (error) {
     yield put(getIssueFailed(error.message));
   }

@@ -9,8 +9,8 @@ export class IssueList extends React.Component {
     this.props.onGetIssue(issueId);
   }
 
-  handleDeleteIssue = (issueId) => {
-    this.props.onDeleteIssue(issueId);
+  handleDeleteIssue = (issue) => {
+    this.props.onDeleteIssue(issue);
   }
 
   render() {

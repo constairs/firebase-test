@@ -58,9 +58,9 @@ export const uploadCancelFailed = error => ({
   payload: error,
 });
 
-export const deleteIssueRequest = issueId => ({
+export const deleteIssueRequest = issue => ({
   type: TYPES.DELETE_ISSUE_REQUEST,
-  payload: issueId
+  payload: issue
 });
 export const deleteIssueSuccessed = createIssueResponse => ({
   type: TYPES.DELETE_ISSUE_SUCCESSED,
@@ -71,14 +71,14 @@ export const deleteIssueFailed = error => ({
   payload: error
 });
 
-export const openIssueEditor = issueId => ({
+export const openIssueEditor = issue => ({
   type: TYPES.OPEN_ISSUE_EDITOR,
-  payload: issueId
+  payload: issue
 });
 
-export const getIssueRequest = issueId => ({
+export const getIssueRequest = issueData => ({
   type: TYPES.GET_ISSUE_REQUEST,
-  payload: issueId
+  payload: issueData
 });
 export const getIssueSuccessed = issue => ({
   type: TYPES.GET_ISSUE_SUCCESSED,

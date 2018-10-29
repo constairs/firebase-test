@@ -56,7 +56,7 @@ export class IssueForm extends React.Component {
       this.props.issue.createdAt || Date.now(),
       this.state.issueTitle,
       this.state.issueDescription,
-      this.state.issueFor,
+      this.state.issueFor.value,
       this.props.issue.createdAt ? Date.now() : null,
     ];
     const { issueFiles } = this.state;

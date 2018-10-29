@@ -15,7 +15,7 @@ class EditIssue extends React.Component {
     this.props.createIssueRequest({ user: this.props.user.email, createIssueData });
   }
 
-  handleEditIssue= (editIssueData) => {
+  handleEditIssue = (editIssueData) => {
     this.props.editIssueRequest({ user: this.props.user.email, editIssueData });
   }
 
@@ -25,10 +25,12 @@ class EditIssue extends React.Component {
 
   render() {
     const { currentIssue } = this.props.issues;
+    const { users } = this.props.user;
     return (
       <Page>
         <h1>Edit Issue</h1>
         <IssueForm
+          users={users}
           issue={currentIssue}
           onEditIssue={this.handleEditIssue}
           onCreateIssue={this.handleCreateIssue}

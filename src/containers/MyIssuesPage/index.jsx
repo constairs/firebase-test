@@ -37,16 +37,16 @@ class Issues extends React.Component {
     history.push('/issues/new');
   }
 
-  handleDelete = (issueId) => {
-    this.props.deleteIssueRequest(issueId);
+  handleDelete = (issue) => {
+    this.props.deleteIssueRequest(issue);
   }
 
   handleGetIssue = (issueId) => {
-    this.props.getIssueRequest(issueId);
+    this.props.getIssueRequest({ user: this.props.user.email, forOwner: true, issueId });
   }
 
-  handleEdit = (issueId) => {
-    this.props.editIssueRequest(issueId);
+  handleEdit = (issue) => {
+    this.props.editIssueRequest(issue);
   }
 
   render() {
@@ -54,28 +54,29 @@ class Issues extends React.Component {
     const { email } = this.props.user;
     return (
       <Page>
-        { issues.length > 0 && !issuesFetching ?
-        (
-          <div>
-            <IssueList
-              issues={issues}
-              username={email}
-              onEditIssue={this.handleEdit}
-              onDeleteIssue={this.handleDelete}
-              onGetIssue={this.handleGetIssue}
-              onAttachmentDownload={this.handleAttachmentDownload}
-            />
-            <Button onClick={this.addNewIssue}>New issue</Button>
-          </div>
+        {
+          issues.length > 0
+          && !issuesFetching
+          ?
+          (
+            <div>
+              <IssueList
+                issues={issues}
+                username={email}
+                onEditIssue={this.handleEdit}
+                onDeleteIssue={this.handleDelete}
+                onGetIssue={this.handleGetIssue}
+                onAttachmentDownload={this.handleAttachmentDownload}
+              />
+              <Button onClick={this.addNewIssue}>New issue</Button>
+            </div>
 
-        )
-        :
-        (
-          <div>
-            {issuesFetching ? <Preloader><Spinner /></Preloader> : <h1>No issues</h1>}
-            <Button onClick={this.addNewIssue}>New issue</Button>
-          </div>
-        )
+          ) : (
+            <div>
+              {issuesFetching ? <Preloader><Spinner /></Preloader> : <h1>No issues</h1>}
+              <Button onClick={this.addNewIssue}>New issue</Button>
+            </div>
+          )
         }
         <IssuesNotification />
       </Page>

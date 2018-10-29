@@ -20,8 +20,8 @@ const storage = firebase.storage(app);
 const storageRef = storage.ref();
 
 export function uploadFiles(files) {
+  
   function uploadFile(file) {
-
     const metadata = {
       contentType: file.type,
       size: file.size,

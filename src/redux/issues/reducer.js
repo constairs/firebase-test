@@ -138,7 +138,7 @@ const issueAnswerRequest = () => assoc('issueFetching', true);
 const issueAnswerSuccessed = answerData => pipe(
   assoc('issueFetching', false),
   over(issuesLens, map(
-    issue => (issue.issueId === answerData.id ?
+    issue => (issue.issueId === answerData.issue.issueId ?
       { ...issue, answer: answerData.answerInfo }
       :
       issue

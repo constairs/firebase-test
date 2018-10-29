@@ -17,11 +17,15 @@ export const Head = ({ ...props }) => {
                 Auth
             </Link>
           </li>
-          <li>
-            <Link href="/login" to="/login">
-                Login
-            </Link>
-          </li>
+          {
+            !logged ?
+              <li>
+                <Link href="/login" to="/login">
+                  Login
+                </Link>
+              </li>
+            : null
+          }
           {
             logged ?
               <li>
@@ -29,8 +33,7 @@ export const Head = ({ ...props }) => {
                   Profile
                 </Link>
               </li>
-          :
-          null
+            : null
           }
           {
             logged ?

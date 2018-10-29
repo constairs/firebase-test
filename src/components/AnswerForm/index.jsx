@@ -1,21 +1,36 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
+import styled from 'styled-components';
 
 import { Textarea } from '../UI/Textarea';
 import { Checkbox } from '../UI/Checkbox';
 import { Label } from '../UI/Label';
 import { Button } from '../UI/Button';
 
+
+const StyledCheckbox = styled.div`
+  input {
+    width: 30px;
+    height: 30px;
+  };
+`;
+
 export class AnswerForm extends React.Component {
   state = {
     text: '',
-    isCheckbox: false,
+    isComplete: false,
   };
 
-  changeText = ({ target }) => {
+  changeInput = ({ target }) => {
     const { name, value } = target;
     this.setState({
       [name]: value
+    });
+  }
+
+  changeCheckbox = () => {
+    this.setState({
+      isComplete: !this.state.isComplete
     });
   }
 
@@ -23,22 +38,24 @@ export class AnswerForm extends React.Component {
     e.preventDefault();
     const formData = {
       answerText: this.state.text,
-      isComplete: this.state.isCheckbox
+      isComplete: this.state.isComplete
     };
     this.props.onAnswerForm(formData);
   }
 
   render() {
-    const { text, isCheckbox } = this.state;
+    const { text, isComplete } = this.state;
     return (
       <form onSubmit={this.submitIssueAnswer}>
-        <Label >
+        <Label>
           <span>Text</span>
-          <Textarea onChange={this.changeText} name="text" value={text} />
+          <Textarea onChange={this.changeInput} name="text" value={text} />
         </Label>
         <Label>
           <span>Checkbox</span>
-          <Checkbox id="checkbox" checked={isCheckbox} />
+          <StyledCheckbox>
+            <input type="checkbox" id="checkbox" onChange={this.changeCheckbox} name="isCheckbox" checked={isComplete} />
+          </StyledCheckbox>
         </Label>
         <Button type="submit">Submit</Button>
       </form>

@@ -30,16 +30,16 @@ class Issues extends React.Component {
     this.props.fetchIssuesRequest({ user: this.props.user.email, forOwner: false });
   }
 
-  handleDelete = (issueId) => {
-    this.props.deleteIssueRequest(issueId);
+  handleDelete = (issue) => {
+    this.props.deleteIssueRequest(issue);
   }
 
   handleGetIssue = (issueId) => {
-    this.props.getIssueRequest(issueId);
+    this.props.getIssueRequest({ user: this.props.user.email, forOwner: false, issueId });
   }
 
-  handleEdit = (issueId) => {
-    this.props.editIssueRequest(issueId);
+  handleEdit = (issue) => {
+    this.props.editIssueRequest(issue);
   }
 
   render() {
@@ -47,25 +47,26 @@ class Issues extends React.Component {
     const { email } = this.props.user;
     return (
       <Page>
-        { issues.length > 0 && !issuesFetching ?
-        (
-          <div>
-            <IssueList
-              issues={issues}
-              username={email}
-              onEditIssue={this.handleEdit}
-              onDeleteIssue={this.handleDelete}
-              onGetIssue={this.handleGetIssue}
-              onAttachmentDownload={this.handleAttachmentDownload}
-            />
-          </div>
-        )
-        :
-        (
-          <div>
-            {issuesFetching ? <Preloader><Spinner /></Preloader> : <h1>No issues</h1>}
-          </div>
-        )
+        {
+          issues.length > 0
+          && !issuesFetching
+          ?
+          (
+            <div>
+              <IssueList
+                issues={issues}
+                username={email}
+                onEditIssue={this.handleEdit}
+                onDeleteIssue={this.handleDelete}
+                onGetIssue={this.handleGetIssue}
+                onAttachmentDownload={this.handleAttachmentDownload}
+              />
+            </div>
+          ) : (
+            <div>
+              {issuesFetching ? <Preloader><Spinner /></Preloader> : <h1>No issues</h1>}
+            </div>
+          )
         }
         <IssuesNotification />
       </Page>
@@ -86,7 +87,6 @@ export const IssuesPage = connect(
     fetchUsersRequest: bindActionCreators(fetchUsersRequest, dispatch),
   })
 )(Issues);
-
 
 Issues.propTypes = {
   fetchIssuesRequest: PropTypes.func.isRequired,

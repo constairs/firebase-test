@@ -40,14 +40,14 @@ export function createIssue(user, issueId, createdAt, issueTitle, issueDescripti
     title: issueTitle,
     createdAt: createdAt,
     description: issueDescription,
-    for: issueFor.value,
+    for: issueFor,
     attachedFiles: attachedFiles,
     owner: user.split('@')[0],
   };
 
   return Promise.all([
-    firebase.database().ref('/users/' + issueData.owner + '/myIssues/').set(issueData),
-    firebase.database().ref('/users/' + issueFor.value + '/issues/').set(issueData),
+    firebase.database().ref('/users/' + issueData.owner + '/myIssues/' + issueId).set(issueData),
+    firebase.database().ref('/users/' + issueFor + '/issues/' + issueId).set(issueData),
   ]).then(() => {
     return issueData
   })
@@ -67,47 +67,34 @@ export function editIssue(user, issueId, createdAt, issueTitle, issueDescription
     owner: user.split('@')[0],
   };
 
-  return new Promise((resolve, reject) => {
-    firebase.database().ref('/issues/' + issueId).update(updatedIssue,
-    (error) => {
-      if (error) {
-        reject(error);
-      }
-      resolve(updatedIssue);
-    }).then(() => {resolve(updatedIssue)}).catch((error) => {reject(error)});
-  });
-}
-
-export function answerIssue(answerData) {
-
-  return new Promise((resolve, reject) => {
-    firebase.database().ref('/issues/' + answerData.id + '/answer/').update(answerData.answerInfo,
-      (error) => {
-        if (error) {
-          reject(error);
-        }
-        resolve(answerData);
-      }
-    ).then(() => {resolve(answerData)}).catch((error) => {reject(error)});
+  return Promise.all([
+    firebase.database().ref('/users/' + updatedIssue.owner + '/myIssues/' + issueId).update(updatedIssue),
+    firebase.database().ref('/users/' + issueFor + '/issues/' + issueId).update(updatedIssue),
+  ]).then(() => {
+    return updatedIssue
   })
+  .catch((error) => reject(error));
   
 }
 
-export function deleteIssueData(issueId) {
-  return new Promise((resolve, reject) => {
-    firebase.database().ref('/issues/' + issueId).remove()
-    .then(() => resolve(issueId))
-    .catch((error) => reject(error));
-  });
+export function answerIssue(answerData) {
+  return Promise.all([
+    firebase.database().ref('/users/' + answerData.issue.owner + '/myIssues/' + answerData.issue.issueId + '/answer').update(answerData.answerInfo),
+    firebase.database().ref('/users/' + answerData.issue.for + '/issues/' + answerData.issue.issueId + '/answer').update(answerData.answerInfo),
+  ])
+  .then(() => {
+    return answerData
+  })
+  .catch((error) => {return error});
 }
 
-export function fetchIssues(fetchingParams) {
-  const filter = fetchingParams.user.split('@')[0];
-  const ref = firebase.database().ref('/issues/');
+export function deleteIssueData(issueData) {
+  const filter = issueData.user.split('@')[0];
 
-  if(fetchingParams.forOwner) {
+  if(issueData.forOwner) {
+    const ref = firebase.database().ref(`/users/${filter}/myIssues`);
     return new Promise((resolve, reject) => {
-      ref.orderByChild('owner').equalTo(filter).once('value')
+      ref.once('value')
       .then((snapshot) => {
         resolve(snapshot.val());
       })
@@ -115,7 +102,8 @@ export function fetchIssues(fetchingParams) {
     });
   } else {
     return new Promise((resolve, reject) => {
-      ref.orderByChild('for').equalTo(filter).once('value')
+      const ref = firebase.database().ref(`/users/${filter}/issues`);
+      ref.once('value')
       .then((snapshot) => {
         resolve(snapshot.val());
       })
@@ -124,12 +112,51 @@ export function fetchIssues(fetchingParams) {
   }
 }
 
-export function getIssue(issueId) {
-  return new Promise((resolve, reject) => {
-    firebase.database().ref('/issues/' + issueId).once('value')
-    .then((snapshot) => {
-      resolve(snapshot.val());
-    })
-    .catch((error) => reject(error));
-  });
+export function fetchIssues(fetchingParams) {
+  const filter = fetchingParams.user.split('@')[0];
+
+  if(fetchingParams.forOwner) {
+    const ref = firebase.database().ref(`/users/${filter}/myIssues`);
+    return new Promise((resolve, reject) => {
+      ref.once('value')
+      .then((snapshot) => {
+        resolve(snapshot.val());
+      })
+      .catch((error) => reject(error));
+    });
+  } else {
+    return new Promise((resolve, reject) => {
+      const ref = firebase.database().ref(`/users/${filter}/issues`);
+      ref.once('value')
+      .then((snapshot) => {
+        resolve(snapshot.val());
+      })
+      .catch((error) => reject(error));
+    });
+  }
+
+}
+
+export function getIssue(issueData) {
+  const filter = issueData.user.split('@')[0];
+
+  if(issueData.forOwner) {
+    const ref = firebase.database().ref(`/users/${filter}/myIssues/${issueData.issueId}`);
+    return new Promise((resolve, reject) => {
+      ref.once('value')
+      .then((snapshot) => {
+        resolve(snapshot.val());
+      })
+      .catch((error) => reject(error));
+    });
+  } else {
+    return new Promise((resolve, reject) => {
+      const ref = firebase.database().ref(`/users/${filter}/issues/${issueData.issueId}`);
+      ref.once('value')
+      .then((snapshot) => {
+        resolve(snapshot.val());
+      })
+      .catch((error) => reject(error));
+    });
+  }
 }
