@@ -8,5 +8,5 @@ export const Label = styled.label`
     font-size: 12px;
     margin-bottom: 4px;
     letter-spacing: 1px;
-  }
+  };
 `;

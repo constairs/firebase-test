@@ -25,6 +25,6 @@ export const ImgContainer = styled.div`
     button {
       opacity: 1;
       transform: translateY(0);
-    }
-  }
+    };
+  };
 `;

@@ -14,8 +14,8 @@ export const ModalWindow = styled.div`
     position: absolute;
     top: 5px;
     right: 5px;
-  }
+  };
   ${Form} {
     max-height: 400px;
-  }
+  };
 `;

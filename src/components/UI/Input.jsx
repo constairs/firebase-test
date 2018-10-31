@@ -10,5 +10,5 @@ export const Input = styled.input`
   padding: 4px 0;
   :focus {
     border-color: ${colors.accent};
-  }
+  };
 `;

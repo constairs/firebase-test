@@ -15,5 +15,5 @@ export const Button = styled.button`
   :disabled {
     background-color: ${colors.greyHover};
     color: ${colors.dGrey};
-  }
+  };
 `;

@@ -23,7 +23,7 @@ export const FilesList = styled.ul`
       width: 100%;
       display: block;
       border-radius: 5px;
-    }
+    };
     ${FilePreviewItem} {
       margin-bottom: 10px;
     };
@@ -41,6 +41,6 @@ export const FilesList = styled.ul`
       justify-content: center;
       align-items: center;
       cursor: pointer;
-    }
+    };
   }
 `;

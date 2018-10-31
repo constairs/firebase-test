@@ -11,5 +11,5 @@ export const ModalWrapper = styled.div`
   top: 0;
   background-color: rgba(255,255,255,.8);
   z-index: 10;
-  ${props => (props.show ? 'dislay: block' : 'display: none')}
+  dislay: ${props => (props.show ? 'block' : 'none')};
 `;

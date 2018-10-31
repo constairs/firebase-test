@@ -3,7 +3,6 @@ import { PropTypes } from 'prop-types';
 import styled from 'styled-components';
 
 import { Textarea } from '../UI/Textarea';
-import { Checkbox } from '../UI/Checkbox';
 import { Label } from '../UI/Label';
 import { Button } from '../UI/Button';
 

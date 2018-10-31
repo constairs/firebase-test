@@ -11,12 +11,13 @@ export const Notification = styled.div`
   top: 50px;
   right: 20px;
   transition: opacity .1s;
-  ${props => (props.show ? 'transform: translateY(0px); opacity: 1;' : 'transform: translateY(20px); opacity: 0;')}
+  transform: ${props => (props.show ? 'translateY(0px)' : 'translateY(20px); opacity: 0;')};
+  opacity: ${props => (props.show ? '1' : '0')};
   >button {
     position: absolute;
     top: 5px;
     right: 5px;
     width: 20px;
     height: 20px;
-  }
+  };
 `;

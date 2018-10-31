@@ -27,8 +27,6 @@ export class ResetForm extends React.Component {
   render() {
     const { emailInput } = this.state;
     return (
-
-
       <Form onSubmit={this.handleSubmit}>
         <Label htmlFor="email">
           <span>Email</span>

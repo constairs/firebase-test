@@ -11,5 +11,5 @@ export const Panel = styled.div`
   color: ${colors.black};
   :hover {
     background-color: ${colors.dGrey};
-  }
+  };
 `;

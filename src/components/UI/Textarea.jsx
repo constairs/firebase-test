@@ -10,5 +10,5 @@ export const Textarea = styled.textarea`
   padding: 4px 0;
   :focus {
     border: 1px solid ${colors.accent}
-  }
+  };
 `;

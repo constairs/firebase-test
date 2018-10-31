@@ -18,7 +18,7 @@ const StyledClose = styled.button`
   border: none;
   :hover {
     background-color: ${colors.accent};
-  }
+  };
 `;
 
 export const CloseBtn = ({ ...props }) => {
